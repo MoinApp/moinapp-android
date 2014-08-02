@@ -50,6 +50,10 @@ public class FriendListActivity extends Activity {
         mDaoSession = ((MoinApplication) getApplication()).getDaoSession();
         mFriendDao = mDaoSession.getFriendDao();
 
+        loadFriendsFromDatabase();
+    }
+
+    private void loadFriendsFromDatabase() {
         String textColumn = FriendDao.Properties.Username.columnName;
         String orderBy = textColumn + " COLLATE LOCALIZED ASC";
         Cursor cursor = mDaoSession.getDatabase().query(mFriendDao.getTablename(), mFriendDao.getAllColumns(), null, null, null, null, orderBy);
@@ -59,7 +63,6 @@ public class FriendListActivity extends Activity {
 
         mFriendAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_expandable_list_item_2, cursor, from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         mFriendListView.setAdapter(mFriendAdapter);
-
     }
 
 
@@ -72,7 +75,7 @@ public class FriendListActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_friend_list_search) {
             startActivityForResult(new Intent(this, AddFriendActivity.class), 42);
             return true;
         }
@@ -83,8 +86,8 @@ public class FriendListActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 42) {
-            mFriendAdapter.notifyDataSetChanged();
+        if (requestCode == 42) {
+            loadFriendsFromDatabase();
         }
     }
 
