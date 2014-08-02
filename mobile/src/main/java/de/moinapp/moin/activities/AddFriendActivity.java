@@ -96,11 +96,13 @@ public class AddFriendActivity extends Activity {
     }
 
     private void onUserFound(User user) {
-        Friend friend = new Friend();
-        friend.setEmail(user.email_hash);
-        friend.setUuid(user.id);
-        friend.setUsername(user.username);
-        mFriendDao.insertOrReplace(friend);
+        if (mFriendDao.queryBuilder().where(FriendDao.Properties.Uuid.eq(user.id)).count() == 0) {
+            Friend friend = new Friend();
+            friend.setEmail(user.email_hash);
+            friend.setUuid(user.id);
+            friend.setUsername(user.username);
+            mFriendDao.insertOrReplace(friend);
+        }
         finish();
     }
 
