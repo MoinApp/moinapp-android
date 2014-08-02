@@ -2,10 +2,13 @@ package de.moinapp.moin.data;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,8 +34,14 @@ public class FriendCursorAdapter extends SimpleCursorAdapter {
         }
 
         String username = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Username.columnName));
+        String emailHash = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Email.columnName));
+        String gravatarUrl = "http://www.gravatar.com/avatar/" + emailHash + ".jpg";
+
 
         holder.usernameTextView.setText(username);
+        if (!TextUtils.isEmpty(emailHash)) {
+            Picasso.with(view.getContext()).load(gravatarUrl).into(holder.avaterImageView);
+        }
     }
 
     public class ViewHolder {
