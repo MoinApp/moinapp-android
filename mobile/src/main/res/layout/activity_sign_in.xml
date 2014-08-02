@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:valid="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -9,7 +10,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <com.andreabaccega.widget.FormEditText
+        valid:testType="alphaNumeric"
         android:id="@+id/sign_in_accountname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +19,8 @@
         android:inputType="textPersonName"
         android:padding="10dp" />
 
-    <EditText
+    <com.andreabaccega.widget.FormEditText
+        valid:testType="nocheck"
         android:id="@+id/sign_in_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
