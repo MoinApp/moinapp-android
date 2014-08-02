@@ -32,6 +32,7 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
+import de.moinapp.moin.api.APIError;
 import de.moinapp.moin.api.GCMID;
 import de.moinapp.moin.api.Moin;
 import de.moinapp.moin.api.MoinClient;
@@ -122,7 +123,7 @@ public class FriendListActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                error.printStackTrace();
+                Log.e("MOIN", (((APIError) error.getBodyAs(APIError.class)).message), error);
             }
         });
     }
