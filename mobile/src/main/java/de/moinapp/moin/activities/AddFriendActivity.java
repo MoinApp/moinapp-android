@@ -100,7 +100,7 @@ public class AddFriendActivity extends Activity {
 
     private void onFindUserError(APIError e) {
         mSubmitButton.setEnabled(true);
-        mUsernameText.setError(e.message);
+        mUsernameText.setError(getString(R.string.add_friend_error_not_found));
     }
 
     private void onUserFound(User user) {
