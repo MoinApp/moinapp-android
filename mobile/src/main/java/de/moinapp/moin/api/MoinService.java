@@ -5,7 +5,6 @@ import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.GET;
 import retrofit.http.POST;
-import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -13,7 +12,8 @@ import retrofit.http.Query;
  * Created by jhbruhn on 02.08.14.
  */
 public interface MoinService {
-    @POST("/moin") //TODO: wont work because of field.
+    @POST("/moin")
+        //TODO: wont work because of field.
     void sendMoin(@Field("to") String receiver, @Query("session") String session, Callback<Void> cb);
 
     @GET("/user/{name}")
@@ -28,6 +28,6 @@ public interface MoinService {
     @POST("/user/session")
     Session login(@Body User user);
 
-    @PUT("/user")
-    void addGCMId(@Field("gcm_id") String gcmId, @Query("session") String session, Callback<Void> cb);
+    @POST("/user/gcm")
+    void addGCMId(@Body GCMID gcmid, @Query("session") String session, Callback<Void> cb);
 }
