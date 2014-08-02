@@ -7,7 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.Button;
 
 import com.andreabaccega.widget.FormEditText;
 
@@ -16,7 +16,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
-import de.moinapp.moin.api.Error;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.api.User;
@@ -33,6 +32,9 @@ public class AddFriendActivity extends Activity {
 
     @InjectView(R.id.add_friend_username)
     FormEditText mUsernameText;
+
+    @InjectView(R.id.add_friend_submit)
+    Button mSubmitButton;
 
 
     private FriendDao mFriendDao;
@@ -75,7 +77,9 @@ public class AddFriendActivity extends Activity {
     @OnClick(R.id.add_friend_submit)
     public void searchFriend() {
         if (!mUsernameText.testValidity()) return;
-        
+
+        mSubmitButton.setEnabled(false);
+
         String username = mUsernameText.getText().toString();
 
         MoinService moin = MoinClient.getMoinService(this);
@@ -88,13 +92,14 @@ public class AddFriendActivity extends Activity {
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
-                onFindUserError((Error) error.getBodyAs(Error.class));
+                onFindUserError(error);
             }
         });
     }
 
-    private void onFindUserError(Error e) {
-        Toast.makeText(this, e.message, Toast.LENGTH_LONG).show();
+    private void onFindUserError(RetrofitError e) {
+        mSubmitButton.setEnabled(true);
+        mUsernameText.setError(getString(R.string.add_friend_error_not_found));
     }
 
     private void onUserFound(User user) {
