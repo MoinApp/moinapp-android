@@ -12,11 +12,11 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.api.Session;
 import de.moinapp.moin.api.User;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -60,10 +60,7 @@ public class SignUpActivity extends Activity {
         final String password = mPasswordText.getText().toString();
         final String email = mEmailText.getText().toString();
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(getString(R.string.production_server))
-                .build();
-        MoinService moin = restAdapter.create(MoinService.class);
+        MoinService moin = MoinClient.getMoinService(this);
 
         final Bundle data = new Bundle();
 
