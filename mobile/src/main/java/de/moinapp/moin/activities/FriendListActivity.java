@@ -23,7 +23,7 @@ import de.moinapp.moin.db.DaoSession;
 import de.moinapp.moin.db.FriendDao;
 
 
-public class MainActivity extends Activity {
+public class FriendListActivity extends Activity {
 
     @InjectView(R.id.main_list_friends)
     ListView mFriendListView;
@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_friend_list);
 
         ButterKnife.inject(this);
 
@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.friend_list, menu);
         return true;
     }
 
