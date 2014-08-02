@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_add_friend">Add Friend</string>
+    <string name="add_friend_username">Username</string>
+    <string name="add_friend_submit">Search</string>
+</resources>

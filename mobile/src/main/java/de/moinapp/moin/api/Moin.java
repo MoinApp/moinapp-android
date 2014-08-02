@@ -6,6 +6,10 @@ package de.moinapp.moin.api;
 public class Moin {
     public String to;
 
+    public Moin() {
+
+    }
+
     public Moin(String to) {
         this.to = to;
     }
