@@ -8,6 +8,7 @@ public class User {
     String id;
     String password;
     String email;
+    String email_hash;
 
     public User(String username, String password) {
         this.username = username;
