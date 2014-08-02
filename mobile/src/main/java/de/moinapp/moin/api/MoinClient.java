@@ -12,7 +12,7 @@ import retrofit.RestAdapter;
 public class MoinClient {
 
     public static MoinService getMoinService(Context ctx) {
-        String endpointUrl = ctx.getString(BuildConfig.DEBUG ? R.string.debug_server : R.string.production_server);
+        String endpointUrl = ctx.getString(false ? R.string.debug_server : R.string.production_server);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(endpointUrl)

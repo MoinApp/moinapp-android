@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.Toast;
+
+import com.andreabaccega.widget.FormEditText;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,13 +29,16 @@ import static de.moinapp.moin.activities.AuthenticatorActivity.PARAM_USER_PASS;
 public class SignUpActivity extends Activity {
 
     @InjectView(R.id.sign_up_accountname)
-    EditText mUsernameText;
+    FormEditText mUsernameText;
 
     @InjectView(R.id.sign_up_password)
-    EditText mPasswordText;
+    FormEditText mPasswordText;
 
     @InjectView(R.id.sign_up_email)
-    EditText mEmailText;
+    FormEditText mEmailText;
+
+    @InjectView(R.id.sign_up_submit)
+    Button mSubmitButton;
 
 
     private String mAccountType;
@@ -57,6 +62,10 @@ public class SignUpActivity extends Activity {
 
     @OnClick(R.id.sign_up_submit)
     public void signUp() {
+        if (!mUsernameText.testValidity()) return;
+        if (!mPasswordText.testValidity()) return;
+        if (!mEmailText.testValidity()) return;
+
         final String username = mUsernameText.getText().toString();
         final String password = mPasswordText.getText().toString();
         final String email = mEmailText.getText().toString();
@@ -64,6 +73,8 @@ public class SignUpActivity extends Activity {
         MoinService moin = MoinClient.getMoinService(this);
 
         final Bundle data = new Bundle();
+
+        mSubmitButton.setEnabled(false);
 
         moin.register(new User(username, password, email), new Callback<Session>() {
             @Override
@@ -83,12 +94,14 @@ public class SignUpActivity extends Activity {
                     finish();
                 } else {
                     Toast.makeText(getBaseContext(), session.message, Toast.LENGTH_SHORT).show();
+                    mSubmitButton.setEnabled(true);
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                mSubmitButton.setEnabled(true);
                 error.printStackTrace();
             }
         });
