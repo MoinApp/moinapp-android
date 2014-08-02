@@ -16,12 +16,19 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
+import de.moinapp.moin.api.Moin;
+import de.moinapp.moin.api.MoinClient;
+import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.auth.AccountGeneral;
 import de.moinapp.moin.data.FriendCursorAdapter;
 import de.moinapp.moin.db.DaoSession;
 import de.moinapp.moin.db.FriendDao;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class FriendListActivity extends Activity {
@@ -63,6 +70,28 @@ public class FriendListActivity extends Activity {
         mFriendListView.setAdapter(mFriendAdapter);
     }
 
+    @OnItemClick(R.id.main_list_friends)
+    public void onFriendItemClick(int position) {
+        Cursor cursor = (Cursor) mFriendAdapter.getItem(position);
+        String userId = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Uuid.columnName));
+
+        sendMoin(userId);
+    }
+
+    private void sendMoin(String userId) {
+        MoinService moin = MoinClient.getMoinService(this);
+        moin.sendMoin(new Moin(userId), mAuthToken, new Callback<Void>() {
+            @Override
+            public void success(Void aVoid, Response response) {
+                Toast.makeText(FriendListActivity.this, "Moin Sent!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
