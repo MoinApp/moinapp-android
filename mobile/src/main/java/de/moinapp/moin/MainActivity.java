@@ -4,42 +4,70 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.moinapp.moin.auth.AccountGeneral;
+import de.moinapp.moin.db.DaoSession;
+import de.moinapp.moin.db.FriendDao;
 
 
 public class MainActivity extends Activity {
 
+    @InjectView(R.id.main_list_friends)
+    ListView mFriendListView;
+
+
     private AccountManager mAccountManager;
+    private DaoSession mDaoSession;
+    private FriendDao mFriendDao;
+
+    private SimpleCursorAdapter mFriendAdapter;
+
+    private String mAuthToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.inject(this);
+
         mAccountManager = AccountManager.get(this);
         getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+
+        mDaoSession = ((MoinApplication) getApplication()).getDaoSession();
+        mFriendDao = mDaoSession.getFriendDao();
+
+        String textColumn = FriendDao.Properties.Username.columnName;
+        String orderBy = textColumn + " COLLATE LOCALIZED ASC";
+        Cursor cursor = mDaoSession.getDatabase().query(mFriendDao.getTablename(), mFriendDao.getAllColumns(), null, null, null, null, orderBy);
+        String[] from = {textColumn, FriendDao.Properties.Username.columnName};
+
+        int[] to = {android.R.id.text1, android.R.id.text2};
+
+        mFriendAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_expandable_list_item_2, cursor, from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        mFriendListView.setAdapter(mFriendAdapter);
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
@@ -48,16 +76,14 @@ public class MainActivity extends Activity {
     }
 
     private void getTokenForAccountCreateIfNeeded(String accountType, String authTokenType) {
-        final AccountManagerFuture<Bundle> future = mAccountManager.getAuthTokenByFeatures(accountType, authTokenType, null, this, null, null,
+        mAccountManager.getAuthTokenByFeatures(accountType, authTokenType, null, this, null, null,
                 new AccountManagerCallback<Bundle>() {
                     @Override
                     public void run(AccountManagerFuture<Bundle> future) {
                         Bundle bnd = null;
                         try {
                             bnd = future.getResult();
-                            final String authtoken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
-                            showMessage(((authtoken != null) ? "SUCCESS!\ntoken: " + authtoken : "FAIL"));
-                            Log.d("MOIN", "GetTokenForAccount Bundle is " + bnd);
+                            mAuthToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
 
                         } catch (Exception e) {
                             e.printStackTrace();
