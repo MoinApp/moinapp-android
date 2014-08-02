@@ -2,6 +2,7 @@ package de.moinapp.moin.api;
 
 import android.content.Context;
 
+import de.moinapp.moin.BuildConfig;
 import de.moinapp.moin.R;
 import retrofit.RestAdapter;
 
@@ -11,12 +12,10 @@ import retrofit.RestAdapter;
 public class MoinClient {
 
     public static MoinService getMoinService(Context ctx) {
-        return getMoinService(false, ctx);
-    }
+        String endpointUrl = ctx.getString(BuildConfig.DEBUG ? R.string.debug_server : R.string.production_server);
 
-    public static MoinService getMoinService(boolean debug, Context ctx) {
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(ctx.getString(R.string.production_server))
+                .setEndpoint(endpointUrl)
                 .build();
         return restAdapter.create(MoinService.class);
     }

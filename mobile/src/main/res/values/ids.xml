@@ -2,4 +2,5 @@
 <resources>
     <string name="google_project_id">720362445613</string>
     <string name="production_server">https://moinapp.herokuapp.com/</string>
+    <string name="debug_server">http://192.168.178.39:3000</string>
 </resources>
