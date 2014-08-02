@@ -3,3 +3,5 @@ android:
   components:
     - android-20
     - build-tools-20.0.0
+    - build-tools-20
+    - platform-tools-20
