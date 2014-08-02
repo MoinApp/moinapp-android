@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import de.moinapp.moin.R;
+import de.moinapp.moin.api.APIError;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.api.Session;
@@ -79,28 +80,26 @@ public class SignUpActivity extends Activity {
         moin.register(new User(username, password, email), new Callback<Session>() {
             @Override
             public void success(Session session, Response response) {
-                if (session.status == 0) {
-                    String authToken = session.session;
+                String authToken = session.session;
 
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, username);
-                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
-                    data.putString(AccountManager.KEY_AUTHTOKEN, authToken);
-                    data.putString(PARAM_USER_PASS, password);
+                data.putString(AccountManager.KEY_ACCOUNT_NAME, username);
+                data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
+                data.putString(AccountManager.KEY_AUTHTOKEN, authToken);
+                data.putString(PARAM_USER_PASS, password);
 
-                    final Intent res = new Intent();
-                    res.putExtras(data);
+                final Intent res = new Intent();
+                res.putExtras(data);
 
-                    setResult(RESULT_OK, res);
-                    finish();
-                } else {
-                    Toast.makeText(getBaseContext(), session.message, Toast.LENGTH_SHORT).show();
-                    mSubmitButton.setEnabled(true);
-                }
+                setResult(RESULT_OK, res);
+                finish();
+
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                APIError e = (APIError) error.getBodyAs(APIError.class);
+
+                Toast.makeText(getBaseContext(), e.message, Toast.LENGTH_SHORT).show();
                 mSubmitButton.setEnabled(true);
                 error.printStackTrace();
             }

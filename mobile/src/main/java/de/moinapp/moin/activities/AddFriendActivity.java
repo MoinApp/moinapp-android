@@ -16,6 +16,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
+import de.moinapp.moin.api.APIError;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.api.User;
@@ -92,14 +93,14 @@ public class AddFriendActivity extends Activity {
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
-                onFindUserError(error);
+                onFindUserError((APIError) error.getBodyAs(APIError.class));
             }
         });
     }
 
-    private void onFindUserError(RetrofitError e) {
+    private void onFindUserError(APIError e) {
         mSubmitButton.setEnabled(true);
-        mUsernameText.setError(getString(R.string.add_friend_error_not_found));
+        mUsernameText.setError(e.message);
     }
 
     private void onUserFound(User user) {

@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import de.moinapp.moin.R;
+import de.moinapp.moin.api.APIError;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.api.Session;
@@ -97,26 +98,20 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         moin.login(new User(username, password), new Callback<Session>() {
             @Override
             public void success(Session session, Response response) {
-                if (session.status == 0) {
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, username);
-                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-                    data.putString(AccountManager.KEY_AUTHTOKEN, session.session);
-                    data.putString(PARAM_USER_PASS, password);
-                    final Intent res = new Intent();
-                    res.putExtras(data);
-                    finishLogin(res);
-                } else {
-                    mSubmitButton.setEnabled(true);
-                    Toast.makeText(getBaseContext(), session.message, Toast.LENGTH_SHORT).show();
-                }
-
-
+                data.putString(AccountManager.KEY_ACCOUNT_NAME, username);
+                data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+                data.putString(AccountManager.KEY_AUTHTOKEN, session.session);
+                data.putString(PARAM_USER_PASS, password);
+                final Intent res = new Intent();
+                res.putExtras(data);
+                finishLogin(res);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 mSubmitButton.setEnabled(true);
-                Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                APIError e = (APIError) error.getBodyAs(APIError.class);
+                Toast.makeText(getBaseContext(), e.message, Toast.LENGTH_SHORT).show();
                 error.printStackTrace();
             }
         });
