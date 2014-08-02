@@ -4,7 +4,7 @@
     <string name="app_name">Moin</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
     <string name="production_server">https://moinapp.herokuapp.com/</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
 
 </resources>

@@ -35,10 +35,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     private final int REQ_SIGNUP = 1;
 
 
-    @InjectView(R.id.signin_accountname)
+    @InjectView(R.id.sign_in_accountname)
     EditText mAccountName;
 
-    @InjectView(R.id.signin_password)
+    @InjectView(R.id.sign_in_password)
     EditText mAccountPassword;
 
 
@@ -48,14 +48,31 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.activity_signin);
+        setContentView(R.layout.activity_sign_in);
         ButterKnife.inject(this);
 
         mAuthTokenType = getIntent().getStringExtra(ARG_AUTH_TYPE);
         mAccountManager = AccountManager.get(getBaseContext());
     }
 
-    @OnClick(R.id.signin_submit)
+    @OnClick(R.id.sign_in_sign_up)
+    public void signUp() {
+        Intent signup = new Intent(getBaseContext(), SignUpActivity.class);
+        signup.putExtras(getIntent().getExtras());
+        startActivityForResult(signup, REQ_SIGNUP);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // The sign up activity returned that the user has successfully created an account
+        if (requestCode == REQ_SIGNUP && resultCode == RESULT_OK) {
+            finishLogin(data);
+        } else
+            super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @OnClick(R.id.sign_in_submit)
     public void submit() {
         final String username = mAccountName.getText().toString();
         final String password = mAccountPassword.getText().toString();
