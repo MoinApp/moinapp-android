@@ -11,12 +11,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import de.moinapp.moin.AuthenticatorActivity;
-import de.moinapp.moin.R;
+import de.moinapp.moin.activities.AuthenticatorActivity;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.api.User;
-import retrofit.RestAdapter;
 
 /**
  * Created by jhbruhn on 02.08.14.

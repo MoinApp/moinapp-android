@@ -1,4 +1,4 @@
-package de.moinapp.moin;
+package de.moinapp.moin.activities;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.moinapp.moin.R;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.api.Session;
@@ -20,8 +21,8 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import static de.moinapp.moin.AuthenticatorActivity.ARG_ACCOUNT_TYPE;
-import static de.moinapp.moin.AuthenticatorActivity.PARAM_USER_PASS;
+import static de.moinapp.moin.activities.AuthenticatorActivity.ARG_ACCOUNT_TYPE;
+import static de.moinapp.moin.activities.AuthenticatorActivity.PARAM_USER_PASS;
 
 public class SignUpActivity extends Activity {
 

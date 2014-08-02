@@ -1,4 +1,4 @@
-package de.moinapp.moin;
+package de.moinapp.moin.activities;
 
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.moinapp.moin.MoinApplication;
+import de.moinapp.moin.R;
 import de.moinapp.moin.auth.AccountGeneral;
 import de.moinapp.moin.db.DaoSession;
 import de.moinapp.moin.db.FriendDao;

@@ -1,4 +1,4 @@
-package de.moinapp.moin;
+package de.moinapp.moin.activities;
 
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.moinapp.moin.R;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.api.Session;
