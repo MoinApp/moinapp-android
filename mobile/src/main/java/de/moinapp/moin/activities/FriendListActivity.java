@@ -19,6 +19,7 @@ import butterknife.InjectView;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
 import de.moinapp.moin.auth.AccountGeneral;
+import de.moinapp.moin.data.FriendCursorAdapter;
 import de.moinapp.moin.db.DaoSession;
 import de.moinapp.moin.db.FriendDao;
 
@@ -33,7 +34,7 @@ public class FriendListActivity extends Activity {
     private DaoSession mDaoSession;
     private FriendDao mFriendDao;
 
-    private SimpleCursorAdapter mFriendAdapter;
+    private FriendCursorAdapter mFriendAdapter;
 
     private String mAuthToken;
 
@@ -57,11 +58,8 @@ public class FriendListActivity extends Activity {
         String textColumn = FriendDao.Properties.Username.columnName;
         String orderBy = textColumn + " COLLATE LOCALIZED ASC";
         Cursor cursor = mDaoSession.getDatabase().query(mFriendDao.getTablename(), mFriendDao.getAllColumns(), null, null, null, null, orderBy);
-        String[] from = {textColumn, FriendDao.Properties.Username.columnName};
 
-        int[] to = {android.R.id.text1, android.R.id.text2};
-
-        mFriendAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_expandable_list_item_2, cursor, from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        mFriendAdapter = new FriendCursorAdapter(this, cursor, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         mFriendListView.setAdapter(mFriendAdapter);
     }
 
