@@ -24,9 +24,16 @@ public class ReMoinReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String senderId = intent.getStringExtra("sender_id");
+        if (!intent.hasExtra("peda")) return;
+        String extra = intent.getStringExtra("peda");
+        String senderId = TextUtils.split(extra, "\\|")[0];
+
         if (TextUtils.isEmpty(senderId)) return;
-        int notificationId = intent.getIntExtra("notification_id", -1);
+
+
+        int notificationId = Integer.valueOf(TextUtils.split(extra, "\\|")[1]);
+
+
         ((NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(notificationId);
 

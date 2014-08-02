@@ -3,5 +3,6 @@
 
     <string name="app_name">Moin</string>
     <string name="action_settings">Settings</string>
-
+    <string name="moin_from">Moin from %s</string>
+    <string name="reply">Re-Moin</string>
 </resources>

@@ -19,7 +19,6 @@ import de.moinapp.moin.activities.FriendListActivity;
  */
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 42;
-    private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
 
 
@@ -50,26 +49,26 @@ public class GcmIntentService extends IntentService {
         String sender = extras.getString("username");
 
 
-        mNotificationManager = (NotificationManager)
+        NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, FriendListActivity.class), 0);
 
-        int notificationId = (int) System.currentTimeMillis();
+        int notificationId = Double.valueOf(Math.random() * 200).intValue();
 
         Intent remoinIntent = new Intent(this, ReMoinReceiver.class);
-        remoinIntent.putExtra("sender_id", extras.getString("id"));
-        remoinIntent.putExtra("notification_id", notificationId);
+        String extraString = extras.getString("id") + "|" + notificationId + "";
+        remoinIntent.putExtra("peda", extraString);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Moin")
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText("Moin from " + sender))
-                        .setContentText("Moin from " + sender)
-                        .addAction(R.drawable.ic_action_reply, "Re-Moin", PendingIntent.getBroadcast(this, 0, remoinIntent, 0));
+                                .bigText(getString(R.string.moin_from, sender)))
+                        .setContentText(getString(R.string.moin_from, sender))
+                        .addAction(R.drawable.ic_action_reply, getString(R.string.reply), PendingIntent.getBroadcast(this, notificationId, remoinIntent, PendingIntent.FLAG_ONE_SHOT));
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(notificationId, mBuilder.build());
