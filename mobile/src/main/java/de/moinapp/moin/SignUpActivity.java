@@ -31,6 +31,9 @@ public class SignUpActivity extends Activity {
     @InjectView(R.id.sign_up_password)
     EditText mPasswordText;
 
+    @InjectView(R.id.sign_up_email)
+    EditText mEmailText;
+
 
     private String mAccountType;
 
@@ -55,6 +58,7 @@ public class SignUpActivity extends Activity {
     public void signUp() {
         final String username = mUsernameText.getText().toString();
         final String password = mPasswordText.getText().toString();
+        final String email = mEmailText.getText().toString();
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(getString(R.string.production_server))
@@ -63,7 +67,7 @@ public class SignUpActivity extends Activity {
 
         final Bundle data = new Bundle();
 
-        moin.register(new User(username, password), new Callback<Session>() {
+        moin.register(new User(username, password, email), new Callback<Session>() {
             @Override
             public void success(Session session, Response response) {
                 if (session.status == 0) {

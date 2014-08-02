@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_sign_in">SignUpActivity</string>
+    <string name="sign_in_username">Username</string>
+    <string name="sign_in_password">Password</string>
+    <string name="sign_in_submit">Sign In</string>
+    <string name="sign_in_sign_up">New User?</string>
+</resources>
