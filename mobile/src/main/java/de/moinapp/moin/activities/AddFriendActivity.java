@@ -7,8 +7,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import com.andreabaccega.widget.FormEditText;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,7 +32,7 @@ import retrofit.client.Response;
 public class AddFriendActivity extends Activity {
 
     @InjectView(R.id.add_friend_username)
-    EditText mUsernameText;
+    FormEditText mUsernameText;
 
 
     private FriendDao mFriendDao;
@@ -73,7 +74,8 @@ public class AddFriendActivity extends Activity {
 
     @OnClick(R.id.add_friend_submit)
     public void searchFriend() {
-
+        if (!mUsernameText.testValidity()) return;
+        
         String username = mUsernameText.getText().toString();
 
         MoinService moin = MoinClient.getMoinService(this);
