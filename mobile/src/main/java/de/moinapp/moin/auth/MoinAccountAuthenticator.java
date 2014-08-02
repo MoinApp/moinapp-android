@@ -13,6 +13,7 @@ import android.util.Log;
 
 import de.moinapp.moin.AuthenticatorActivity;
 import de.moinapp.moin.R;
+import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.api.User;
 import retrofit.RestAdapter;
@@ -75,10 +76,7 @@ public class MoinAccountAuthenticator extends AbstractAccountAuthenticator {
                 try {
                     Log.d("udinic", "> re-authenticating with the existing password");
 
-                    RestAdapter restAdapter = new RestAdapter.Builder()
-                            .setEndpoint(mContext.getString(R.string.production_server))
-                            .build();
-                    MoinService moin = restAdapter.create(MoinService.class);
+                    MoinService moin = MoinClient.getMoinService(mContext);
 
                     authToken = moin.login(new User(account.name, password)).session;
                 } catch (Exception e) {
