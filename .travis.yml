@@ -1,1 +1,5 @@
 language: android
+android:
+  components:
+    - android-20
+    - build-tools-20
