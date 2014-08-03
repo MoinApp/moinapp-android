@@ -42,14 +42,19 @@ public class ReMoinReceiver extends BroadcastReceiver {
     }
 
     private void sendReMoin(final Context ctx, final String receiver) {
-        AccountManager.get(ctx).getAuthTokenByFeatures(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, null, null, null,
+        sendReMoin(ctx, receiver, false);
+    }
+
+    private void sendReMoin(final Context ctx, final String receiver, final boolean retry) {
+        final AccountManager accountManager = AccountManager.get(ctx);
+        accountManager.getAuthTokenByFeatures(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, null, null, null,
                 new AccountManagerCallback<Bundle>() {
                     @Override
                     public void run(AccountManagerFuture<Bundle> future) {
                         Bundle bnd = null;
                         try {
                             bnd = future.getResult();
-                            String mAuthToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
+                            final String mAuthToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
 
                             MoinService moin = MoinClient.getMoinService(ctx);
                             moin.sendMoin(new Moin(receiver), mAuthToken, new Callback<Void>() {
@@ -60,7 +65,11 @@ public class ReMoinReceiver extends BroadcastReceiver {
 
                                 @Override
                                 public void failure(RetrofitError error) {
-
+                                    if (error.getResponse().getStatus() == 403) {
+                                        accountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
+                                        if (!retry)
+                                            sendReMoin(ctx, receiver, true);
+                                    }
                                 }
                             });
 

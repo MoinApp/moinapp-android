@@ -77,6 +77,10 @@ public class AddFriendActivity extends Activity {
 
     @OnClick(R.id.add_friend_submit)
     public void searchFriend() {
+        searchFriend(false);
+    }
+
+    public void searchFriend(final boolean retry) {
         if (!mUsernameText.testValidity()) return;
 
         mSubmitButton.setEnabled(false);
@@ -92,6 +96,11 @@ public class AddFriendActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
+                if (error.getResponse().getStatus() == 403) {
+                    mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
+                    if (!retry)
+                        searchFriend(true);
+                }
                 error.printStackTrace();
                 onFindUserError((APIError) error.getBodyAs(APIError.class));
             }

@@ -65,15 +65,12 @@ public class MoinAccountAuthenticator extends AbstractAccountAuthenticator {
 
         String authToken = am.peekAuthToken(account, authTokenType);
 
-        Log.d("udinic", "> peekAuthToken returned - " + authToken);
 
         // Lets give another try to authenticate the user
         if (TextUtils.isEmpty(authToken)) {
             final String password = am.getPassword(account);
             if (password != null) {
                 try {
-                    Log.d("udinic", "> re-authenticating with the existing password");
-
                     MoinService moin = MoinClient.getMoinService(mContext);
 
                     authToken = moin.login(new User(account.name, password)).session;
@@ -81,6 +78,8 @@ public class MoinAccountAuthenticator extends AbstractAccountAuthenticator {
                     e.printStackTrace();
                 }
             }
+        } else {
+            
         }
 
         // If we get an authToken - we return it

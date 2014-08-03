@@ -25,7 +25,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -47,15 +46,12 @@ import retrofit.client.Response;
 
 
 public class FriendListActivity extends Activity {
-    public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     String SENDER_ID = "";
     GoogleCloudMessaging gcm;
-    AtomicInteger msgId = new AtomicInteger();
-    SharedPreferences prefs;
     String regid;
 
     @InjectView(R.id.main_list_friends)
@@ -114,6 +110,10 @@ public class FriendListActivity extends Activity {
     }
 
     private void sendMoin(String userId) {
+        sendMoin(userId, false);
+    }
+
+    private void sendMoin(final String userId, final boolean retry) {
         MoinService moin = MoinClient.getMoinService(this);
         moin.sendMoin(new Moin(userId), mAuthToken, new Callback<Void>() {
             @Override
@@ -124,6 +124,11 @@ public class FriendListActivity extends Activity {
             @Override
             public void failure(RetrofitError error) {
                 Log.e("MOIN", (((APIError) error.getBodyAs(APIError.class)).message), error);
+                if (error.getResponse().getStatus() == 403) {
+                    mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
+                    if (!retry)
+                        sendMoin(userId, true);
+                }
             }
         });
     }
@@ -165,7 +170,7 @@ public class FriendListActivity extends Activity {
                 new AccountManagerCallback<Bundle>() {
                     @Override
                     public void run(AccountManagerFuture<Bundle> future) {
-                        Bundle bnd = null;
+                        Bundle bnd;
                         try {
                             bnd = future.getResult();
                             mAuthToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
@@ -182,6 +187,10 @@ public class FriendListActivity extends Activity {
     }
 
     private void registerGCMToken() {
+        registerGCMToken(false);
+    }
+
+    private void registerGCMToken(final boolean retry) {
         new AsyncTask<Void, Void, Void>() {
 
             @Override
@@ -205,6 +214,11 @@ public class FriendListActivity extends Activity {
 
                         @Override
                         public void failure(RetrofitError error) {
+                            if (error.getResponse().getStatus() == 403) {
+                                mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
+                                if (!retry)
+                                    registerGCMToken(true);
+                            }
                             error.printStackTrace();
                         }
                     });
@@ -213,6 +227,13 @@ public class FriendListActivity extends Activity {
                     // Require the user to click a button again, or perform
                     // exponential back-off.
                     ex.printStackTrace();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (!retry)
+                        registerGCMToken(true);
                 }
                 return null;
             }
@@ -227,7 +248,7 @@ public class FriendListActivity extends Activity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
+        editor.apply();
     }
 
     private void showMessage(final String msg) {
