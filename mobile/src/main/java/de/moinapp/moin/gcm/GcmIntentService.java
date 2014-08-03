@@ -89,7 +89,7 @@ public class GcmIntentService extends IntentService {
                 .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + sounds[new Random().nextInt(sounds.length)]))
                 .setLargeIcon(avatar)
                 .setStyle(new NotificationCompat.BigPictureStyle()
-                        .bigPicture(bigPicture))
+                        .bigPicture(bigPicture).setSummaryText(getString(R.string.moin_from, sender)).setBigContentTitle("Moin"))
                 .addAction(R.drawable.ic_action_reply, getString(R.string.reply), PendingIntent.getBroadcast(this, notificationId, remoinIntent, PendingIntent.FLAG_ONE_SHOT));
 
         mBuilder.setContentIntent(contentIntent);
