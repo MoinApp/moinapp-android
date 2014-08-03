@@ -1,4 +1,4 @@
-package de.moinapp.moin;
+package de.moinapp.moin.gcm;
 
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;

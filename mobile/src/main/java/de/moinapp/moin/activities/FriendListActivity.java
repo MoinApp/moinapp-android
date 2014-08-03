@@ -90,6 +90,7 @@ public class FriendListActivity extends Activity {
         mFriendDao = mDaoSession.getFriendDao();
 
         loadFriendsFromDatabase();
+
     }
 
     private void loadFriendsFromDatabase() {

@@ -35,12 +35,12 @@ public class FriendCursorAdapter extends SimpleCursorAdapter {
 
         String username = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Username.columnName));
         String emailHash = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Email.columnName));
-        String gravatarUrl = "http://www.gravatar.com/avatar/" + emailHash + ".jpg";
+        String gravatarUrl = "http://www.gravatar.com/avatar/" + emailHash + ".jpg?s=256";
 
 
         holder.usernameTextView.setText(username);
         if (!TextUtils.isEmpty(emailHash)) {
-            Picasso.with(view.getContext()).load(gravatarUrl).into(holder.avaterImageView);
+            Picasso.with(view.getContext()).load(gravatarUrl).fit().centerCrop().into(holder.avaterImageView);
         }
     }
 

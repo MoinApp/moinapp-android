@@ -14,7 +14,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import java.util.Random;
 
 import de.moinapp.moin.R;
-import de.moinapp.moin.ReMoinReceiver;
 import de.moinapp.moin.activities.FriendListActivity;
 
 /**
