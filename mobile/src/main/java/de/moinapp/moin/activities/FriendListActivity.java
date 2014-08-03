@@ -31,7 +31,6 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
-import de.moinapp.moin.api.APIError;
 import de.moinapp.moin.api.GCMID;
 import de.moinapp.moin.api.Moin;
 import de.moinapp.moin.api.MoinClient;
@@ -124,7 +123,6 @@ public class FriendListActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e("MOIN", (((APIError) error.getBodyAs(APIError.class)).message), error);
                 if (error.getResponse().getStatus() == 403) {
                     mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
                     getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);

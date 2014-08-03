@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.moinapp.moin.R;
 import de.moinapp.moin.db.FriendDao;
+import de.moinapp.moin.util.GravatarUtil;
 
 /**
  * Created by jhbruhn on 02.08.14.
@@ -35,7 +36,7 @@ public class FriendCursorAdapter extends SimpleCursorAdapter {
 
         String username = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Username.columnName));
         String emailHash = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Email.columnName));
-        String gravatarUrl = "http://www.gravatar.com/avatar/" + emailHash + ".jpg?s=256";
+        String gravatarUrl = GravatarUtil.getAvatarUrl(emailHash, 256);
 
 
         holder.usernameTextView.setText(username);

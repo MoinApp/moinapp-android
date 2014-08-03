@@ -5,16 +5,20 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.Random;
 
 import de.moinapp.moin.R;
 import de.moinapp.moin.activities.FriendListActivity;
+import de.moinapp.moin.util.GravatarUtil;
 
 /**
  * Created by jhbruhn on 02.08.14.
@@ -65,17 +69,32 @@ public class GcmIntentService extends IntentService {
 
         int[] sounds = new int[]{R.raw.moin1, R.raw.moin3, R.raw.moin4, R.raw.moin5};
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("Moin")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(getString(R.string.moin_from, sender)))
-                        .setContentText(getString(R.string.moin_from, sender))
-                        .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + sounds[new Random().nextInt(sounds.length)]))
-                        .addAction(R.drawable.ic_action_reply, getString(R.string.reply), PendingIntent.getBroadcast(this, notificationId, remoinIntent, PendingIntent.FLAG_ONE_SHOT));
+        Bitmap avatar = null;
+        Bitmap bigPicture = null;
+
+        try {
+            avatar = Picasso.with(getApplicationContext()).load(GravatarUtil.getAvatarUrl(extras.getString("email_hash"), getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width))).get();
+            bigPicture = Picasso.with(getApplicationContext()).load(GravatarUtil.getAvatarUrl(extras.getString("email_hash"), 512)).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NotificationCompat.Builder mBuilder;
+
+        mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle("Moin")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(getString(R.string.moin_from, sender)))
+                .setContentText(getString(R.string.moin_from, sender))
+                .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + sounds[new Random().nextInt(sounds.length)]))
+                .setLargeIcon(avatar)
+                .setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture(bigPicture))
+                .addAction(R.drawable.ic_action_reply, getString(R.string.reply), PendingIntent.getBroadcast(this, notificationId, remoinIntent, PendingIntent.FLAG_ONE_SHOT));
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(notificationId, mBuilder.build());
+
+
     }
 }
