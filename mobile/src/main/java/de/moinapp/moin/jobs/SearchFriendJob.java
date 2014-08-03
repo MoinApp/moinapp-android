@@ -50,8 +50,10 @@ public class SearchFriendJob extends Job {
         try {
             user = moin.getUser(username, authToken);
         } catch (RetrofitError e) {
-            if (e.getResponse().getStatus() == 404)
+            if (e.getResponse().getStatus() == 404) {
                 EventBus.getDefault().post(new UserNotFoundEvent());
+                return;
+            }
         }
 
         FriendDao friendDao = MoinApplication.getMoinApplication().getDaoSession().getFriendDao();
