@@ -44,6 +44,8 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.0.0-RC2'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.+'
 
+    compile 'com.path:android-priority-jobqueue:1.1.2'
+
     compile 'com.jakewharton:butterknife:5.1.2'
     compile 'com.andreabaccega:android-form-edittext:1.0.5@aar'
 
