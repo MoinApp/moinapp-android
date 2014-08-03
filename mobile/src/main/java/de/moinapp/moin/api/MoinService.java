@@ -16,7 +16,7 @@ public interface MoinService {
     Object sendMoin(@Body Moin moin, @Query("session") String session);
 
     @GET("/user/{name}")
-    void getUser(@Path("name") String name, @Query("session") String session, Callback<User> cb);
+    User getUser(@Path("name") String name, @Query("session") String session);
 
     @POST("/user")
     void register(@Body User user, Callback<Session> cb);
@@ -26,9 +26,6 @@ public interface MoinService {
 
     @POST("/user/session")
     Session login(@Body User user);
-
-    @POST("/user/gcm")
-    void addGCMId(@Body GCMID gcmid, @Query("session") String session, Callback<Void> cb);
 
     @POST("/user/gcm")
     Object addGCMId(@Body GCMID gcmid, @Query("session") String session);

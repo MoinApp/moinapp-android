@@ -1,8 +1,5 @@
 package de.moinapp.moin.activities;
 
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,19 +11,12 @@ import com.andreabaccega.widget.FormEditText;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
-import de.moinapp.moin.api.APIError;
-import de.moinapp.moin.api.MoinClient;
-import de.moinapp.moin.api.MoinService;
-import de.moinapp.moin.api.User;
-import de.moinapp.moin.auth.AccountGeneral;
-import de.moinapp.moin.db.DaoSession;
-import de.moinapp.moin.db.Friend;
-import de.moinapp.moin.db.FriendDao;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import de.moinapp.moin.events.UserFoundEvent;
+import de.moinapp.moin.events.UserNotFoundEvent;
+import de.moinapp.moin.jobs.SearchFriendJob;
 
 
 public class AddFriendActivity extends Activity {
@@ -37,12 +27,6 @@ public class AddFriendActivity extends Activity {
     @InjectView(R.id.add_friend_submit)
     Button mSubmitButton;
 
-
-    private FriendDao mFriendDao;
-
-    private String mAuthToken;
-    private AccountManager mAccountManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,80 +34,35 @@ public class AddFriendActivity extends Activity {
 
         ButterKnife.inject(this);
 
-        DaoSession mDaoSession = ((MoinApplication) getApplication()).getDaoSession();
-        mFriendDao = mDaoSession.getFriendDao();
-
-        mAccountManager = AccountManager.get(this);
-        getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+        EventBus.getDefault().register(this);
     }
 
-    private void getTokenForAccountCreateIfNeeded(String accountType, String authTokenType) {
-        mAccountManager.getAuthTokenByFeatures(accountType, authTokenType, null, this, null, null,
-                new AccountManagerCallback<Bundle>() {
-                    @Override
-                    public void run(AccountManagerFuture<Bundle> future) {
-                        Bundle bnd = null;
-                        try {
-                            bnd = future.getResult();
-                            mAuthToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                , null);
+        EventBus.getDefault().unregister(this);
     }
 
     @OnClick(R.id.add_friend_submit)
     public void searchFriend() {
-        searchFriend(false);
-    }
-
-    public void searchFriend(final boolean retry) {
         if (!mUsernameText.testValidity()) return;
 
         mSubmitButton.setEnabled(false);
 
         String username = mUsernameText.getText().toString();
 
-        MoinService moin = MoinClient.getMoinService(this);
-        moin.getUser(username, mAuthToken, new Callback<User>() {
-            @Override
-            public void success(User user, Response response) {
-                onUserFound(user);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                if (error.getResponse().getStatus() == 403) {
-                    mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
-                    getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-                    if (!retry)
-                        searchFriend(true);
-                }
-                error.printStackTrace();
-                onFindUserError((APIError) error.getBodyAs(APIError.class));
-            }
-        });
+        MoinApplication.getMoinApplication().getJobManager().addJob(new SearchFriendJob(username));
     }
 
-    private void onFindUserError(APIError e) {
+    public void onEventMainThread(UserNotFoundEvent e) {
         mSubmitButton.setEnabled(true);
         mUsernameText.setError(getString(R.string.add_friend_error_not_found));
     }
 
-    private void onUserFound(User user) {
-        if (mFriendDao.queryBuilder().where(FriendDao.Properties.Uuid.eq(user.id)).count() == 0) {
-            Friend friend = new Friend();
-            friend.setEmail(user.email_hash);
-            friend.setUuid(user.id);
-            friend.setUsername(user.username);
-            mFriendDao.insertOrReplace(friend);
-        }
+    public void onEventMainThread(UserFoundEvent e) {
         finish();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
