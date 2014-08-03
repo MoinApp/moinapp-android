@@ -48,7 +48,7 @@ public class MoinApplication extends Application {
 
                     @Override
                     public boolean isDebugEnabled() {
-                        return true;
+                        return BuildConfig.DEBUG;
                     }
 
                     @Override
