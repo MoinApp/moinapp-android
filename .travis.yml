@@ -1,11 +1,10 @@
 language: android
 android:
   components:
-    - android-20
-    - build-tools-20.0.0
-    - build-tools-20
-    - platform-tools-20
-
+  - android-20
+  - build-tools-20.0.0
+  - build-tools-20
+  - platform-tools-20
 before_install:
 - openssl aes-256-cbc -pass "pass:$KEYSTORE_ENC_PASSWORD" -in ./moin.jks.enc -out
   ./moin.jks -d -a
