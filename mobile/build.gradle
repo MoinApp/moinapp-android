@@ -11,12 +11,24 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("../moin.jks")
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias "moin"
+            keyPassword System.getenv("KEYSTORE_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
+
 
     lintOptions {
         abortOnError false
