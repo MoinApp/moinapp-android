@@ -98,6 +98,7 @@ public class AddFriendActivity extends Activity {
             public void failure(RetrofitError error) {
                 if (error.getResponse().getStatus() == 403) {
                     mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
+                    getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
                     if (!retry)
                         searchFriend(true);
                 }

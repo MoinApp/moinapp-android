@@ -79,7 +79,7 @@ public class MoinAccountAuthenticator extends AbstractAccountAuthenticator {
                 }
             }
         } else {
-            
+
         }
 
         // If we get an authToken - we return it

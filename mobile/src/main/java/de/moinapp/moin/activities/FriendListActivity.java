@@ -126,6 +126,7 @@ public class FriendListActivity extends Activity {
                 Log.e("MOIN", (((APIError) error.getBodyAs(APIError.class)).message), error);
                 if (error.getResponse().getStatus() == 403) {
                     mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
+                    getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
                     if (!retry)
                         sendMoin(userId, true);
                 }
@@ -216,6 +217,7 @@ public class FriendListActivity extends Activity {
                         public void failure(RetrofitError error) {
                             if (error.getResponse().getStatus() == 403) {
                                 mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
+                                getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
                                 if (!retry)
                                     registerGCMToken(true);
                             }
