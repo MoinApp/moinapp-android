@@ -39,6 +39,7 @@ import de.moinapp.moin.auth.AccountGeneral;
 import de.moinapp.moin.data.FriendCursorAdapter;
 import de.moinapp.moin.db.DaoSession;
 import de.moinapp.moin.db.FriendDao;
+import de.moinapp.moin.jobs.SendMoinJob;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -106,7 +107,8 @@ public class FriendListActivity extends Activity {
         Cursor cursor = (Cursor) mFriendAdapter.getItem(position);
         String userId = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Uuid.columnName));
 
-        sendMoin(userId);
+        //sendMoin(userId);
+        MoinApplication.getMoinApplication().getJobManager().addJobInBackground(new SendMoinJob(userId));
     }
 
     private void sendMoin(String userId) {
