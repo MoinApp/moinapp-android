@@ -5,6 +5,6 @@ package de.moinapp.moin.util;
  */
 public class GravatarUtil {
     public static String getAvatarUrl(String emailHash, int size) {
-        return "http://www.gravatar.com/avatar/" + emailHash + ".jpg?s=" + size;
+        return "http://www.gravatar.com/avatar/" + emailHash + ".jpg?s=" + size + "&d=identicon";
     }
 }
