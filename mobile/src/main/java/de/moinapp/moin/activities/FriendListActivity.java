@@ -1,8 +1,6 @@
 package de.moinapp.moin.activities;
 
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,17 +29,11 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
-import de.moinapp.moin.api.GCMID;
-import de.moinapp.moin.api.MoinClient;
-import de.moinapp.moin.api.MoinService;
-import de.moinapp.moin.auth.AccountGeneral;
 import de.moinapp.moin.data.FriendCursorAdapter;
 import de.moinapp.moin.db.DaoSession;
 import de.moinapp.moin.db.FriendDao;
+import de.moinapp.moin.jobs.RegisterGCMJob;
 import de.moinapp.moin.jobs.SendMoinJob;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 
 public class FriendListActivity extends Activity {
@@ -83,13 +75,13 @@ public class FriendListActivity extends Activity {
         regid = getRegistrationId();
 
         mAccountManager = AccountManager.get(this);
-        getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
 
         mDaoSession = ((MoinApplication) getApplication()).getDaoSession();
         mFriendDao = mDaoSession.getFriendDao();
 
         loadFriendsFromDatabase();
 
+        registerGCMToken();
     }
 
     private void loadFriendsFromDatabase() {
@@ -141,32 +133,7 @@ public class FriendListActivity extends Activity {
     }
 
 
-    private void getTokenForAccountCreateIfNeeded(String accountType, String authTokenType) {
-        mAccountManager.getAuthTokenByFeatures(accountType, authTokenType, null, this, null, null,
-                new AccountManagerCallback<Bundle>() {
-                    @Override
-                    public void run(AccountManagerFuture<Bundle> future) {
-                        Bundle bnd;
-                        try {
-                            bnd = future.getResult();
-                            mAuthToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
-
-                            registerGCMToken();
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showMessage(e.getMessage());
-                        }
-                    }
-                }
-                , null);
-    }
-
     private void registerGCMToken() {
-        registerGCMToken(false);
-    }
-
-    private void registerGCMToken(final boolean retry) {
         new AsyncTask<Void, Void, Void>() {
 
             @Override
@@ -177,40 +144,9 @@ public class FriendListActivity extends Activity {
                     }
                     regid = gcm.register(SENDER_ID);
 
-                    // You should send the registration ID to your server over HTTP,
-                    // so it can use GCM/HTTP or CCS to send messages to your app.
-                    // The request to your server should be authenticated if your app
-                    // is using accounts.
-                    MoinService moin = MoinClient.getMoinService(FriendListActivity.this);
-                    moin.addGCMId(new GCMID(regid), mAuthToken, new Callback<Void>() {
-                        @Override
-                        public void success(Void aVoid, Response response) {
-                            storeRegistrationId(regid);
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            if (error.getResponse().getStatus() == 403) {
-                                mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
-                                getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-                                if (!retry)
-                                    registerGCMToken(true);
-                            }
-                            error.printStackTrace();
-                        }
-                    });
+                    MoinApplication.getMoinApplication().getJobManager().addJobInBackground(new RegisterGCMJob(regid));
                 } catch (IOException ex) {
-                    // If there is an error, don't just keep trying to register.
-                    // Require the user to click a button again, or perform
-                    // exponential back-off.
                     ex.printStackTrace();
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (!retry)
-                        registerGCMToken(true);
                 }
                 return null;
             }
