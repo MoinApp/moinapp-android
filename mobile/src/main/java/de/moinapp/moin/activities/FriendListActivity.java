@@ -1,6 +1,8 @@
 package de.moinapp.moin.activities;
 
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +31,7 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
+import de.moinapp.moin.auth.AccountGeneral;
 import de.moinapp.moin.data.FriendCursorAdapter;
 import de.moinapp.moin.db.DaoSession;
 import de.moinapp.moin.db.FriendDao;
@@ -81,7 +84,17 @@ public class FriendListActivity extends Activity {
 
         loadFriendsFromDatabase();
 
-        registerGCMToken();
+        logInCreateIfNeeded();
+    }
+
+    private void logInCreateIfNeeded() {
+        mAccountManager.getAuthTokenByFeatures(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, this, null, null,
+                new AccountManagerCallback<Bundle>() {
+                    @Override
+                    public void run(AccountManagerFuture<Bundle> future) {
+                        registerGCMToken();
+                    }
+                }, null);
     }
 
     private void loadFriendsFromDatabase() {
