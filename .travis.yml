@@ -14,3 +14,12 @@ env:
   global:
   - secure: otwhqmDayCUfUImn53jLzrywJfoJS0o30R4H7rDsnBiEmKK5sZFrY7NOc37EXxpgSrjuuRuoNNTWZzBpMtle5qUbpD0/2PtFGnl1aysfWll3MjhEK9SfmVY3woK+qUs6x/OkYnbxnrAAdRugOu12RFn8ScEkElDINY8vadTX3YU=
   - secure: N4d7AiUbjmUf7DTVzC4oYUd3akPgklVgwZUiAmAuWUD94BVNLouWmYaa7EybvpDtSQ+xR3JOq92AHquVMorOjVy89s9yPqvRYRAkadX5mgluQZ5X9haxHadcBy1JP/2IcOP01v6Oo2IEsQ9+jZFNOxD2rOCN/hiABJZ+KlE6Yr8=
+deploy:
+  provider: releases
+  api_key:
+    secure: Tqwh/Wc4Et1RCVSf4FxfvcoSaoSl2V4T62rwqur4E4UYy9wAXu0HslJ5dUP/NxfbtSxb9x/TisVcH6/a4N7o/L+vom23aBOFxXZYCEDtWX7LPWi0jKi8GyAWEAEp083xrf0ar8KLldylFGHTWnvLm/fexV6QrxfxzUB4GI6uB3k=
+  file: mobile/build/outputs/apk/mobile-release.apk
+  on:
+    repo: MoinApp/moinapp-android
+    tags: true
+    all_branches: false
