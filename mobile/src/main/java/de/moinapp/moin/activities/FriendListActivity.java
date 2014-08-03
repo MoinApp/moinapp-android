@@ -16,7 +16,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -49,8 +49,7 @@ public class FriendListActivity extends Activity {
     String regid;
 
     @InjectView(R.id.main_list_friends)
-    ListView mFriendListView;
-
+    GridView mFriendListView;
 
     private AccountManager mAccountManager;
     private DaoSession mDaoSession;
