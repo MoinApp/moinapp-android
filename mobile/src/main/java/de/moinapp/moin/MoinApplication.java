@@ -10,12 +10,21 @@ import de.moinapp.moin.db.DaoSession;
  * Created by jhbruhn on 02.08.14.
  */
 public class MoinApplication extends Application {
+
+    private static MoinApplication moinApplication = null;
+
+    public static MoinApplication getMoinApplication() {
+        return moinApplication;
+    }
+
+
     private DaoSession mDaoSession;
 
     @Override
     public void onCreate() {
         super.onCreate();
         setupDatabase();
+        moinApplication = this;
     }
 
     private void setupDatabase() {
