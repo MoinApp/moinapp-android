@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
@@ -50,6 +52,10 @@ public class FriendListActivity extends Activity {
 
     @InjectView(R.id.main_list_friends)
     GridView mFriendListView;
+
+    @InjectView(R.id.main_list_add_friend)
+    Button mAddFriendButton;
+
 
     private AccountManager mAccountManager;
     private DaoSession mDaoSession;
@@ -80,6 +86,8 @@ public class FriendListActivity extends Activity {
 
         mDaoSession = ((MoinApplication) getApplication()).getDaoSession();
         mFriendDao = mDaoSession.getFriendDao();
+
+        mFriendListView.setEmptyView(mAddFriendButton);
 
         loadFriendsFromDatabase();
 
@@ -113,17 +121,26 @@ public class FriendListActivity extends Activity {
         MoinApplication.getMoinApplication().getJobManager().addJobInBackground(new SendMoinJob(userId));
     }
 
+    @OnClick(R.id.main_list_add_friend)
+    public void onAddFriendClick() {
+        showAddFriendActivity();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.friend_list, menu);
         return true;
     }
 
+    private void showAddFriendActivity() {
+        startActivityForResult(new Intent(this, AddFriendActivity.class), 42);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_friend_list_search) {
-            startActivityForResult(new Intent(this, AddFriendActivity.class), 42);
+            showAddFriendActivity();
             return true;
         }
         return super.onOptionsItemSelected(item);
