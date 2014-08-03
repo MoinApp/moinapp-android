@@ -32,7 +32,6 @@ import butterknife.OnItemClick;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
 import de.moinapp.moin.api.GCMID;
-import de.moinapp.moin.api.Moin;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.auth.AccountGeneral;
@@ -107,32 +106,7 @@ public class FriendListActivity extends Activity {
         Cursor cursor = (Cursor) mFriendAdapter.getItem(position);
         String userId = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Uuid.columnName));
 
-        //sendMoin(userId);
         MoinApplication.getMoinApplication().getJobManager().addJobInBackground(new SendMoinJob(userId));
-    }
-
-    private void sendMoin(String userId) {
-        sendMoin(userId, false);
-    }
-
-    private void sendMoin(final String userId, final boolean retry) {
-        MoinService moin = MoinClient.getMoinService(this);
-        moin.sendMoin(new Moin(userId), mAuthToken, new Callback<Void>() {
-            @Override
-            public void success(Void aVoid, Response response) {
-                Toast.makeText(FriendListActivity.this, "Moin Sent!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                if (error.getResponse().getStatus() == 403) {
-                    mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
-                    getTokenForAccountCreateIfNeeded(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-                    if (!retry)
-                        sendMoin(userId, true);
-                }
-            }
-        });
     }
 
     @Override
