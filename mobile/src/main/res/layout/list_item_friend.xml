@@ -16,6 +16,7 @@
         android:id="@+id/list_item_friend_username"
         android:textSize="16sp"
         android:gravity="center"
+        android:layout_marginBottom="8dp"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
 </LinearLayout>
