@@ -14,6 +14,9 @@ public interface MoinService {
     @POST("/moin")
     void sendMoin(@Body Moin moin, @Query("session") String session, Callback<Void> cb);
 
+    @POST("/moin")
+    Object sendMoin(@Body Moin moin, @Query("session") String session);
+
     @GET("/user/{name}")
     void getUser(@Path("name") String name, @Query("session") String session, Callback<User> cb);
 
