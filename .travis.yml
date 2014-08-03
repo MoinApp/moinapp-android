@@ -9,7 +9,7 @@ before_install:
 - openssl aes-256-cbc -pass "pass:$KEYSTORE_ENC_PASSWORD" -in ./moin.jks.enc -out
   ./moin.jks -d -a
 script:
-  - ./gradlew build assembleRelease
+- "./gradlew assembleRelease"
 env:
   global:
   - secure: otwhqmDayCUfUImn53jLzrywJfoJS0o30R4H7rDsnBiEmKK5sZFrY7NOc37EXxpgSrjuuRuoNNTWZzBpMtle5qUbpD0/2PtFGnl1aysfWll3MjhEK9SfmVY3woK+qUs6x/OkYnbxnrAAdRugOu12RFn8ScEkElDINY8vadTX3YU=
