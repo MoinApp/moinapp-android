@@ -11,8 +11,6 @@ import retrofit.http.Query;
  * Created by jhbruhn on 02.08.14.
  */
 public interface MoinService {
-    @POST("/moin")
-    void sendMoin(@Body Moin moin, @Query("session") String session, Callback<Void> cb);
 
     @POST("/moin")
     Object sendMoin(@Body Moin moin, @Query("session") String session);
@@ -31,4 +29,7 @@ public interface MoinService {
 
     @POST("/user/gcm")
     void addGCMId(@Body GCMID gcmid, @Query("session") String session, Callback<Void> cb);
+
+    @POST("/user/gcm")
+    Object addGCMId(@Body GCMID gcmid, @Query("session") String session);
 }
