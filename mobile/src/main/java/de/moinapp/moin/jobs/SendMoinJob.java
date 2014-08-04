@@ -37,7 +37,7 @@ public class SendMoinJob extends Job {
         Account[] accounts = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE);
         if (accounts.length == 0) return;
 
-        String authToken = accountManager.blockingGetAuthToken(accounts[0], AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true);
+        String authToken = accountManager.blockingGetAuthToken(accounts[0], AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, false);
 
         MoinService moin = MoinClient.getMoinService(MoinApplication.getMoinApplication());
         try {
@@ -59,6 +59,7 @@ public class SendMoinJob extends Job {
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
+        if (throwable.getMessage() == null) return false;
         return throwable.getMessage().equals("ReAuth");
     }
 }
