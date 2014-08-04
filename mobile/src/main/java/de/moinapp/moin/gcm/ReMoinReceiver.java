@@ -21,6 +21,7 @@ public class ReMoinReceiver extends BroadcastReceiver {
 
         if (TextUtils.isEmpty(senderId)) return;
 
+        MoinApplication.getMoinApplication().getCurrentMoinsPerUser().remove(senderId);
 
         int notificationId = Integer.valueOf(TextUtils.split(extra, "\\|")[1]);
 

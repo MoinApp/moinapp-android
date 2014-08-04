@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.Random;
 
+import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
 import de.moinapp.moin.activities.FriendListActivity;
 import de.moinapp.moin.util.GravatarUtil;
@@ -52,7 +53,10 @@ public class GcmIntentService extends IntentService {
 
     private void sendMoinification(Bundle extras) {
 
+        MoinApplication app = MoinApplication.getMoinApplication();
+
         String sender = extras.getString("username");
+        String senderId = extras.getString("id");
 
 
         NotificationManager mNotificationManager = (NotificationManager)
@@ -61,7 +65,20 @@ public class GcmIntentService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, FriendListActivity.class), 0);
 
+
         int notificationId = Double.valueOf(Math.random() * 200).intValue();
+
+        if (app.getUserNotificationIds().containsKey(senderId)) {
+            notificationId = app.getUserNotificationIds().get(senderId);
+        } else {
+            app.getUserNotificationIds().put(senderId, notificationId);
+        }
+
+
+        int currentMoins = app.getCurrentMoinsPerUser().containsKey(senderId) ? app.getCurrentMoinsPerUser().get(senderId) : 0;
+        currentMoins++;
+        app.getCurrentMoinsPerUser().put(senderId, currentMoins);
+
 
         Intent remoinIntent = new Intent(this, ReMoinReceiver.class);
         String extraString = extras.getString("id") + "|" + notificationId + "";
@@ -71,6 +88,12 @@ public class GcmIntentService extends IntentService {
 
         Bitmap avatar = null;
         Bitmap bigPicture = null;
+
+        Intent activityIntent = new Intent(this, FriendListActivity.class);
+        activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activityIntent.putExtra("senderId", senderId);
+
+        String moinsFrom = currentMoins == 1 ? getString(R.string.moin_from, sender) : getString(R.string.moins_from, currentMoins, sender);
 
         try {
             avatar = Picasso.with(getApplicationContext()).load(GravatarUtil.getAvatarUrl(extras.getString("email_hash"), getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width))).get();
@@ -83,13 +106,15 @@ public class GcmIntentService extends IntentService {
         mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("Moin")
+                .setContentIntent(PendingIntent.getActivity(this, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(getString(R.string.moin_from, sender)))
-                .setContentText(getString(R.string.moin_from, sender))
+                        .bigText(moinsFrom))
+                .setContentText(moinsFrom)
+                .setAutoCancel(true)
                 .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + sounds[new Random().nextInt(sounds.length)]))
                 .setLargeIcon(avatar)
                 .setStyle(new NotificationCompat.BigPictureStyle()
-                        .bigPicture(bigPicture).setSummaryText(getString(R.string.moin_from, sender)).setBigContentTitle("Moin"))
+                        .bigPicture(bigPicture).setSummaryText(moinsFrom).setBigContentTitle("Moin"))
                 .addAction(R.drawable.ic_action_reply, getString(R.string.reply), PendingIntent.getBroadcast(this, notificationId, remoinIntent, PendingIntent.FLAG_ONE_SHOT));
 
         mBuilder.setContentIntent(contentIntent);

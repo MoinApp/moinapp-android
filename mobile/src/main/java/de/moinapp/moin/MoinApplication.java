@@ -8,7 +8,9 @@ import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 
-import de.greenrobot.event.EventBus;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.moinapp.moin.db.DaoMaster;
 import de.moinapp.moin.db.DaoSession;
 
@@ -26,19 +28,15 @@ public class MoinApplication extends Application {
 
     private DaoSession mDaoSession;
     private JobManager mJobManager;
-    private EventBus mEventBus;
+    private Map<String, Integer> mCurrentMoinsPerUser = new HashMap<String, Integer>();
+    private Map<String, Integer> mUserNotificationIds = new HashMap<String, Integer>();
 
     @Override
     public void onCreate() {
         super.onCreate();
         setupDatabase();
         setupJobManager();
-        setupEventBus();
         moinApplication = this;
-    }
-
-    private void setupEventBus() {
-        mEventBus = new EventBus();
     }
 
     private void setupJobManager() {
@@ -89,7 +87,11 @@ public class MoinApplication extends Application {
         return mDaoSession;
     }
 
-    public EventBus getBus() {
-        return mEventBus;
+    public Map<String, Integer> getCurrentMoinsPerUser() {
+        return mCurrentMoinsPerUser;
+    }
+
+    public Map<String, Integer> getUserNotificationIds() {
+        return mUserNotificationIds;
     }
 }

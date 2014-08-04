@@ -92,6 +92,19 @@ public class FriendListActivity extends Activity {
         loadFriendsFromDatabase();
 
         logInCreateIfNeeded();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent.getExtras() != null) {
+            Log.d("PEDA", intent.getExtras().getString("senderId") + "COIN");
+            MoinApplication.getMoinApplication().getCurrentMoinsPerUser().remove(intent.getExtras().getString("senderId"));
+        }
     }
 
     private void logInCreateIfNeeded() {
