@@ -155,10 +155,11 @@ public class FriendListActivity extends Activity {
             showAddFriendActivity();
             return true;
         } else if (id == R.id.action_friend_list_logout) {
+            mFriendDao.deleteAll();
+            loadFriendsFromDatabase();
             mAccountManager.removeAccount(mAccountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0], new AccountManagerCallback<Boolean>() {
                 @Override
                 public void run(AccountManagerFuture<Boolean> future) {
-                    mFriendDao.deleteAll();
                     logInCreateIfNeeded();
                 }
             }, null);
