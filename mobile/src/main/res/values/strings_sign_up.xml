@@ -6,4 +6,8 @@
     <string name="sign_up_email">E-Mail Address</string>
     <string name="sign_up_submit">Register</string>
     <string name="sign_up_sign_in">Already a member?</string>
+
+    <string name="sign_up_error_password_too_short">Password is too short.</string>
+    <string name="sign_up_error_username_too_short">Username is too short.</string>
+    <string name="sign_up_error_username_taken">Username is already taken.</string>
 </resources>

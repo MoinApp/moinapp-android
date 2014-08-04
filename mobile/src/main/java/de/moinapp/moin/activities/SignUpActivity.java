@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.andreabaccega.widget.FormEditText;
 
@@ -99,7 +98,17 @@ public class SignUpActivity extends Activity {
             public void failure(RetrofitError error) {
                 APIError e = (APIError) error.getBodyAs(APIError.class);
 
-                Toast.makeText(getBaseContext(), e.message, Toast.LENGTH_SHORT).show();
+                if (e.code.equals("PasswordTooShort")) {
+                    mPasswordText.setError(getString(R.string.sign_up_error_password_too_short));
+                    mPasswordText.requestFocus();
+                } else if (e.code.equals("UsernameTooShort")) {
+                    mUsernameText.setError(getString(R.string.sign_up_error_username_too_short));
+                    mUsernameText.requestFocus();
+                } else if (e.code.equals("UsernameTaken")) {
+                    mUsernameText.setError(getString(R.string.sign_up_error_username_taken));
+                    mUsernameText.requestFocus();
+                }
+
                 mSubmitButton.setEnabled(true);
                 error.printStackTrace();
             }

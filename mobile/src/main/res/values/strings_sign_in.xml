@@ -7,4 +7,6 @@
     <string name="sign_in_sign_up">New User?</string>
 
     <string name="sign_in_intro">Moin! Please Sign In or Register to proceed.</string>
+
+    <string name="sign_in_error_credentials_wrong">Username or Password wrong.</string>
 </resources>

@@ -6,7 +6,6 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.andreabaccega.widget.FormEditText;
 
@@ -111,7 +110,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             public void failure(RetrofitError error) {
                 mSubmitButton.setEnabled(true);
                 APIError e = (APIError) error.getBodyAs(APIError.class);
-                Toast.makeText(getBaseContext(), e.message, Toast.LENGTH_SHORT).show();
+                if (e.code.equals("CredentialsWrong")) {
+                    mAccountPassword.setError(getString(R.string.sign_in_error_credentials_wrong));
+                    mAccountPassword.requestFocus();
+                }
                 error.printStackTrace();
             }
         });
