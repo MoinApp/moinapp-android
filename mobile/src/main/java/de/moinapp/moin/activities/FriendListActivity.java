@@ -91,7 +91,6 @@ public class FriendListActivity extends Activity {
 
         loadFriendsFromDatabase();
 
-        logInCreateIfNeeded();
         handleIntent(getIntent());
     }
 
@@ -155,6 +154,16 @@ public class FriendListActivity extends Activity {
         if (id == R.id.action_friend_list_search) {
             showAddFriendActivity();
             return true;
+        } else if (id == R.id.action_friend_list_logout) {
+            mAccountManager.removeAccount(mAccountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0], new AccountManagerCallback<Boolean>() {
+                @Override
+                public void run(AccountManagerFuture<Boolean> future) {
+                    mFriendDao.deleteAll();
+                    finish();
+                    logInCreateIfNeeded();
+                }
+            }, null);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -172,6 +181,7 @@ public class FriendListActivity extends Activity {
     protected void onResume() {
         super.onResume();
         checkPlayServices();
+        logInCreateIfNeeded();
     }
 
 

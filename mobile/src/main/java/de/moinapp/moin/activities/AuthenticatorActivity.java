@@ -110,7 +110,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             public void failure(RetrofitError error) {
                 mSubmitButton.setEnabled(true);
                 APIError e = (APIError) error.getBodyAs(APIError.class);
-                if (e.code.equals("CredentialsWrong")) {
+                if (e.code != null && e.code.equals("CredentialsWrong")) {
                     mAccountPassword.setError(getString(R.string.sign_in_error_credentials_wrong));
                     mAccountPassword.requestFocus();
                 }
