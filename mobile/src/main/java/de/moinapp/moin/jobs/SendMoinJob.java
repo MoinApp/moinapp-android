@@ -11,6 +11,7 @@ import de.moinapp.moin.api.Moin;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.auth.AccountGeneral;
+import retrofit.RetrofitError;
 
 /**
  * Created by jhbruhn on 03.08.14.
@@ -39,7 +40,15 @@ public class SendMoinJob extends Job {
         String authToken = accountManager.blockingGetAuthToken(accounts[0], AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true);
 
         MoinService moin = MoinClient.getMoinService(MoinApplication.getMoinApplication());
-        moin.sendMoin(new Moin(receiverId), authToken);
+        try {
+            moin.sendMoin(new Moin(receiverId), authToken);
+        } catch (
+                RetrofitError e) {
+            if (e.getResponse().getStatus() == 401) {
+                accountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, authToken);
+                throw new Exception("ReAuth");
+            }
+        }
 
     }
 
@@ -50,6 +59,6 @@ public class SendMoinJob extends Job {
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return false;
+        return throwable.getMessage().equals("ReAuth");
     }
 }

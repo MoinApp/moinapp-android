@@ -11,6 +11,7 @@ import de.moinapp.moin.api.GCMID;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.auth.AccountGeneral;
+import retrofit.RetrofitError;
 
 /**
  * Created by jhbruhn on 03.08.14.
@@ -39,7 +40,14 @@ public class RegisterGCMJob extends Job {
         String authToken = accountManager.blockingGetAuthToken(accounts[0], AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, true);
 
         MoinService moin = MoinClient.getMoinService(MoinApplication.getMoinApplication());
-        moin.addGCMId(new GCMID(this.gcmId), authToken);
+        try {
+            moin.addGCMId(new GCMID(this.gcmId), authToken);
+        } catch (RetrofitError e) {
+            if (e.getResponse().getStatus() == 401) {
+                accountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, authToken);
+                throw new Exception("ReAuth");
+            }
+        }
     }
 
     @Override
@@ -49,6 +57,6 @@ public class RegisterGCMJob extends Job {
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return false;
+        return throwable.getMessage().equals("ReAuth");
     }
 }

@@ -50,9 +50,13 @@ public class SearchFriendJob extends Job {
         try {
             user = moin.getUser(username, authToken);
         } catch (RetrofitError e) {
+            e.printStackTrace();
             if (e.getResponse().getStatus() == 404) {
                 EventBus.getDefault().post(new UserNotFoundEvent());
                 return;
+            } else if (e.getResponse().getStatus() == 401) {
+                accountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, authToken);
+                throw new Exception("ReAuth");
             }
         }
 
@@ -75,6 +79,6 @@ public class SearchFriendJob extends Job {
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return false;
+        return throwable.getMessage().equals("ReAuth");
     }
 }
