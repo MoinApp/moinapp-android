@@ -159,7 +159,6 @@ public class FriendListActivity extends Activity {
                 @Override
                 public void run(AccountManagerFuture<Boolean> future) {
                     mFriendDao.deleteAll();
-                    finish();
                     logInCreateIfNeeded();
                 }
             }, null);
