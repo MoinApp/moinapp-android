@@ -28,5 +28,8 @@
 -keep interface retrofit.** { *; }
 
 -keep class **$Properties
--keep interface de.moinapp.moin.api.**
--keep class de.moinapp.moin.api.**
+-keep class de.moinapp.moin.api.** { *; }
+
+-dontwarn rx.*
+-keepattributes Signature
+-keep class sun.misc.Unsafe { *; }

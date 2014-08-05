@@ -35,7 +35,6 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            signingConfig signingConfigs.release
         }
     }
     lintOptions {
