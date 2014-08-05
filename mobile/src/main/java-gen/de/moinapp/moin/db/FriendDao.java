@@ -27,6 +27,7 @@ public class FriendDao extends AbstractDao<Friend, Long> {
         public final static Property Uuid = new Property(1, String.class, "uuid", false, "UUID");
         public final static Property Username = new Property(2, String.class, "username", false, "USERNAME");
         public final static Property Email = new Property(3, String.class, "email", false, "EMAIL");
+        public final static Property Moins = new Property(4, Integer.class, "moins", false, "MOINS");
     };
 
 
@@ -45,7 +46,8 @@ public class FriendDao extends AbstractDao<Friend, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'UUID' TEXT," + // 1: uuid
                 "'USERNAME' TEXT," + // 2: username
-                "'EMAIL' TEXT);"); // 3: email
+                "'EMAIL' TEXT," + // 3: email
+                "'MOINS' INTEGER);"); // 4: moins
     }
 
     /** Drops the underlying database table. */
@@ -78,6 +80,11 @@ public class FriendDao extends AbstractDao<Friend, Long> {
         if (email != null) {
             stmt.bindString(4, email);
         }
+ 
+        Integer moins = entity.getMoins();
+        if (moins != null) {
+            stmt.bindLong(5, moins);
+        }
     }
 
     /** @inheritdoc */
@@ -93,7 +100,8 @@ public class FriendDao extends AbstractDao<Friend, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // uuid
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // username
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // email
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // email
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4) // moins
         );
         return entity;
     }
@@ -105,6 +113,7 @@ public class FriendDao extends AbstractDao<Friend, Long> {
         entity.setUuid(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setUsername(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setEmail(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setMoins(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
      }
     
     /** @inheritdoc */

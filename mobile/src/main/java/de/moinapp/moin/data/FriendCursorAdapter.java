@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -15,6 +14,7 @@ import butterknife.InjectView;
 import de.moinapp.moin.R;
 import de.moinapp.moin.db.FriendDao;
 import de.moinapp.moin.util.GravatarUtil;
+import de.moinapp.moin.util.TextViewTarget;
 
 /**
  * Created by jhbruhn on 02.08.14.
@@ -36,19 +36,21 @@ public class FriendCursorAdapter extends SimpleCursorAdapter {
 
         String username = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Username.columnName));
         String emailHash = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Email.columnName));
+        Integer moins = cursor.getInt(cursor.getColumnIndexOrThrow(FriendDao.Properties.Moins.columnName));
         String gravatarUrl = GravatarUtil.getAvatarUrl(emailHash, 256);
 
 
         holder.usernameTextView.setText(username);
+        holder.avaterTextView.setText(moins + "");
         if (!TextUtils.isEmpty(emailHash)) {
-            Picasso.with(view.getContext()).load(gravatarUrl).fit().centerCrop().into(holder.avaterImageView);
+            Picasso.with(view.getContext()).load(gravatarUrl).into(new TextViewTarget(holder.avaterTextView));
         }
     }
 
     public class ViewHolder {
 
-        @InjectView(R.id.list_item_friend_imageview)
-        ImageView avaterImageView;
+        @InjectView(R.id.list_item_friend_textview)
+        TextView avaterTextView;
 
         @InjectView(R.id.list_item_friend_username)
         TextView usernameTextView;

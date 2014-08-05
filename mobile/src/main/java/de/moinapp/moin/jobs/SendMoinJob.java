@@ -6,11 +6,15 @@ import android.accounts.AccountManager;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
+import de.greenrobot.event.EventBus;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.api.Moin;
 import de.moinapp.moin.api.MoinClient;
 import de.moinapp.moin.api.MoinService;
 import de.moinapp.moin.auth.AccountGeneral;
+import de.moinapp.moin.db.Friend;
+import de.moinapp.moin.db.FriendDao;
+import de.moinapp.moin.events.MoinSentEvent;
 import retrofit.RetrofitError;
 
 /**
@@ -42,6 +46,15 @@ public class SendMoinJob extends Job {
         MoinService moin = MoinClient.getMoinService(MoinApplication.getMoinApplication());
         try {
             moin.sendMoin(new Moin(receiverId), authToken);
+
+            FriendDao friendDao = MoinApplication.getMoinApplication().getDaoSession().getFriendDao();
+
+            Friend friend = friendDao.queryBuilder().where(FriendDao.Properties.Uuid.eq(receiverId)).list().get(0);
+            if (friend.getMoins() == null)
+                friend.setMoins(0);
+            friend.setMoins(friend.getMoins() + 1);
+            friendDao.update(friend);
+            EventBus.getDefault().post(new MoinSentEvent());
         } catch (
                 RetrofitError e) {
             if (e.getResponse().getStatus() == 401) {

@@ -31,12 +31,14 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import de.greenrobot.event.EventBus;
 import de.moinapp.moin.MoinApplication;
 import de.moinapp.moin.R;
 import de.moinapp.moin.auth.AccountGeneral;
 import de.moinapp.moin.data.FriendCursorAdapter;
 import de.moinapp.moin.db.DaoSession;
 import de.moinapp.moin.db.FriendDao;
+import de.moinapp.moin.events.MoinSentEvent;
 import de.moinapp.moin.jobs.RegisterGCMJob;
 import de.moinapp.moin.jobs.SendMoinJob;
 
@@ -62,8 +64,6 @@ public class FriendListActivity extends Activity {
     private FriendDao mFriendDao;
 
     private FriendCursorAdapter mFriendAdapter;
-
-    private String mAuthToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,14 @@ public class FriendListActivity extends Activity {
         loadFriendsFromDatabase();
 
         handleIntent(getIntent());
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -131,11 +139,17 @@ public class FriendListActivity extends Activity {
         String userId = cursor.getString(cursor.getColumnIndexOrThrow(FriendDao.Properties.Uuid.columnName));
 
         MoinApplication.getMoinApplication().getJobManager().addJobInBackground(new SendMoinJob(userId));
+
+        loadFriendsFromDatabase();
     }
 
     @OnClick(R.id.main_list_add_friend)
     public void onAddFriendClick() {
         showAddFriendActivity();
+    }
+
+    public void onEventMainThread(MoinSentEvent e) {
+        loadFriendsFromDatabase();
     }
 
     @Override

@@ -5,10 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <de.moinapp.moin.views.SquareImageView
+    <de.moinapp.moin.views.SquareTextView
+        android:shadowColor="#000"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="10"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="100sp"
+        android:gravity="center"
         android:contentDescription="@string/app_name"
         android:layout_margin="8dp"
-        android:id="@+id/list_item_friend_imageview"
+        android:id="@+id/list_item_friend_textview"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
 

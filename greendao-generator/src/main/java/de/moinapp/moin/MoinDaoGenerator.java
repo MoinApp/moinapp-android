@@ -9,13 +9,14 @@ import de.greenrobot.daogenerator.Schema;
  */
 public class MoinDaoGenerator {
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(1, "de.moinapp.moin.db");
+        Schema schema = new Schema(2, "de.moinapp.moin.db");
 
         Entity friend = schema.addEntity("Friend");
         friend.addIdProperty();
         friend.addStringProperty("uuid");
         friend.addStringProperty("username");
         friend.addStringProperty("email");
+        friend.addIntProperty("moins");
 
         new DaoGenerator().generateAll(schema, args[0]);
     }

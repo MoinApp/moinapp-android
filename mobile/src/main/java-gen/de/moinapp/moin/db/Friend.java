@@ -10,6 +10,7 @@ public class Friend {
     private String uuid;
     private String username;
     private String email;
+    private Integer moins;
 
     public Friend() {
     }
@@ -18,11 +19,12 @@ public class Friend {
         this.id = id;
     }
 
-    public Friend(Long id, String uuid, String username, String email) {
+    public Friend(Long id, String uuid, String username, String email, Integer moins) {
         this.id = id;
         this.uuid = uuid;
         this.username = username;
         this.email = email;
+        this.moins = moins;
     }
 
     public Long getId() {
@@ -55,6 +57,14 @@ public class Friend {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getMoins() {
+        return moins;
+    }
+
+    public void setMoins(Integer moins) {
+        this.moins = moins;
     }
 
 }
