@@ -209,7 +209,9 @@ public class FriendListActivity extends Activity {
                         gcm = GoogleCloudMessaging.getInstance(FriendListActivity.this);
                     }
                     regid = gcm.register(SENDER_ID);
-
+                    
+                    storeRegistrationId(regid);
+                    
                     MoinApplication.getMoinApplication().getJobManager().addJobInBackground(new RegisterGCMJob(regid));
                 } catch (IOException ex) {
                     ex.printStackTrace();
