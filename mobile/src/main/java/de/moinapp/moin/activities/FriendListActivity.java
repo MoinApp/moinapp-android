@@ -208,7 +208,10 @@ public class FriendListActivity extends Activity {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(FriendListActivity.this);
                     }
-                    regid = gcm.register(SENDER_ID);
+                    
+                    if(regid == null || regid.isEmpty()) {
+                        regid = gcm.register(SENDER_ID);
+                    }
                     
                     storeRegistrationId(regid);
                     
