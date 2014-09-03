@@ -15,7 +15,7 @@ env:
   - secure: otwhqmDayCUfUImn53jLzrywJfoJS0o30R4H7rDsnBiEmKK5sZFrY7NOc37EXxpgSrjuuRuoNNTWZzBpMtle5qUbpD0/2PtFGnl1aysfWll3MjhEK9SfmVY3woK+qUs6x/OkYnbxnrAAdRugOu12RFn8ScEkElDINY8vadTX3YU=
   - secure: N4d7AiUbjmUf7DTVzC4oYUd3akPgklVgwZUiAmAuWUD94BVNLouWmYaa7EybvpDtSQ+xR3JOq92AHquVMorOjVy89s9yPqvRYRAkadX5mgluQZ5X9haxHadcBy1JP/2IcOP01v6Oo2IEsQ9+jZFNOxD2rOCN/hiABJZ+KlE6Yr8=
 before_deploy:
-- export VERSION_NAME = `git describe --tags`
+- export VERSION_NAME=`git describe --tags`
 - mv mobile/build/outputs/apk/mobile-release.apk ./Moin-$VERSION_NAME.apk
 deploy:
   provider: releases
