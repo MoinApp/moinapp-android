@@ -1,19 +1,26 @@
 apply plugin: 'com.android.application'
 
+def getVersionName = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
 android {
     compileSdkVersion 20
     buildToolsVersion '20.0.0'
     project.ext.vCode = 1
+    
     try {
         project.ext.vCode = Integer.valueOf(System.getenv("TRAVIS_BUILD_NUMBER"))
     } catch (e) {
     }
-    project.ext.vName = System.getenv("TRAVIS_TAG")
-    if (!project.ext.vName) {
-        project.ext.vName = "1.0.0"
-    } else {
-        project.ext.vName = project.ext.vName.replace("v", "")
-    }
+    
+    project.ext.vName = getVersionName()
+    
     defaultConfig {
         applicationId 'de.moinapp.moin'
         minSdkVersion 15
