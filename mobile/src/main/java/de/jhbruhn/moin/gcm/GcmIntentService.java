@@ -70,9 +70,12 @@ public class GcmIntentService extends IntentService {
         if (!extras.isEmpty()) {
             if(GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+                User sender = new User(extras.getString("username"), "");
+                sender.email_hash = extras.getString("email_hash");
+                sender.id = extras.getString("id");
 
                 String moinId = extras.getString("moin-uuid");
-                Set<String> receivedMoins = mReceivedMoins.getStringSet("moins", new HashSet<String>());
+                Set<String> receivedMoins = mReceivedMoins.getStringSet(sender.username, new HashSet<String>());
 
                 if(receivedMoins.contains(moinId)) return;
 
@@ -80,9 +83,7 @@ public class GcmIntentService extends IntentService {
 
                 mReceivedMoins.edit().putStringSet("moins", receivedMoins).commit();
 
-                User sender = new User(extras.getString("username"), "");
-                sender.email_hash = extras.getString("email_hash");
-                sender.id = extras.getString("id");
+
 
                 int unreadMoins = mPreferencesUnreadMoins.getInt(sender.username, 0);
                 mPreferencesUnreadMoins.edit().putInt(sender.username, ++unreadMoins).apply();
