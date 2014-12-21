@@ -81,7 +81,7 @@ public class GcmIntentService extends IntentService {
 
                 receivedMoins.add(moinId);
 
-                mReceivedMoins.edit().putStringSet("moins", receivedMoins).commit();
+                mReceivedMoins.edit().putStringSet(sender.username, receivedMoins).commit();
 
 
 
