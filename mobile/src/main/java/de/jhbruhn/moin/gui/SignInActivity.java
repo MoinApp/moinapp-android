@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -20,6 +21,7 @@ import de.jhbruhn.moin.data.MoinError;
 import de.jhbruhn.moin.data.Session;
 import de.jhbruhn.moin.data.User;
 import de.jhbruhn.moin.data.api.MoinService;
+import hugo.weaving.DebugLog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -181,6 +183,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             }
 
             @Override
+            @DebugLog
             public void failure(RetrofitError error) {
                 mSignInButton.setEnabled(true);
                 mRegisterButton.setEnabled(true);
