@@ -223,15 +223,17 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
         }.execute(null, null, null);
     }
 
+    @DebugLog
     private void storeRegistrationId(String regid) {
         int appVersion = getAppVersion(this);
         Log.i("GCM", "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = mPreferencesGcm.edit();
         editor.putString(PROPERTY_REG_ID, regid);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.apply();
+        editor.commit();
     }
 
+    @DebugLog
     private String getRegistrationId(Context context) {
         String registrationId = mPreferencesGcm.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
@@ -248,6 +250,7 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
         return registrationId;
     }
 
+    @DebugLog
     private static int getAppVersion(Context context) {
         try {
             PackageInfo packageInfo = context.getPackageManager()

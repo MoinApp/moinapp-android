@@ -10,11 +10,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -35,6 +39,10 @@ public class GcmIntentService extends IntentService {
     @Inject
     @Named("unreadMoins")
     SharedPreferences mPreferencesUnreadMoins;
+
+    @Inject
+    @Named("receivedMoins")
+    SharedPreferences mReceivedMoins;
 
     @Inject
     Picasso mPicasso;
@@ -62,6 +70,16 @@ public class GcmIntentService extends IntentService {
         if (!extras.isEmpty()) {
             if(GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+
+                String moinId = extras.getString("moin-uuid");
+                Set<String> receivedMoins = mReceivedMoins.getStringSet("moins", new HashSet<String>());
+
+                if(receivedMoins.contains(moinId)) return;
+
+                receivedMoins.add(moinId);
+
+                mReceivedMoins.edit().putStringSet("moins", receivedMoins).commit();
+
                 User sender = new User(extras.getString("username"), "");
                 sender.email_hash = extras.getString("email_hash");
                 sender.id = extras.getString("id");
@@ -119,6 +137,7 @@ public class GcmIntentService extends IntentService {
                 }
 
                 mNotificationManager.notify(sender.getCrazyId(), builder.build());
+                Log.d("GCM", "Received Notificaiton!");
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
