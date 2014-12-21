@@ -74,11 +74,7 @@ public class ReMoinReceiver extends BroadcastReceiver {
 
                         }
                     });
-                } catch (OperationCanceledException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (AuthenticatorException e) {
+                } catch (OperationCanceledException | IOException | AuthenticatorException e) {
                     e.printStackTrace();
                 }
             }

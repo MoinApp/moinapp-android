@@ -4,15 +4,11 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.squareup.picasso.Picasso;
@@ -40,8 +36,6 @@ public class GcmIntentService extends IntentService {
     @Inject
     Picasso mPicasso;
 
-    private NotificationManager mNotificationManager;
-
     public GcmIntentService() {
         super("GCM STUFF");
     }
@@ -56,7 +50,7 @@ public class GcmIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
@@ -76,9 +70,9 @@ public class GcmIntentService extends IntentService {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                         .setGroup(NOTIFICATION_GROUP)
                         .setNumber(unreadMoins)
-                        .setContentTitle(getString(R.string.main_action_name))
+                        .setContentTitle(getString(R.string.notification_main_action_name))
                         .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentText(getString(R.string.sent_by, sender.username));
+                        .setContentText(getString(R.string.notification_sent_by, sender.username));
 
                 Intent resultIntent = new Intent(this, RecentListActivity.class);
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -94,10 +88,10 @@ public class GcmIntentService extends IntentService {
                 Intent remoinIntent = new Intent(this, ReMoinReceiver.class);
                 remoinIntent.putExtra(ReMoinReceiver.KEY_USERNAME, sender.username);
                 remoinIntent.putExtra(ReMoinReceiver.KEY_NOTIFICATION_ID, sender.getCrazyId());
-                builder.addAction(R.drawable.ic_reply, getString(R.string.action_reply), PendingIntent.getBroadcast(this, sender.getCrazyId(), remoinIntent, Intent.FILL_IN_DATA));
+                builder.addAction(R.drawable.ic_reply, getString(R.string.notification_action_reply), PendingIntent.getBroadcast(this, sender.getCrazyId(), remoinIntent, Intent.FILL_IN_DATA));
 
                 if(unreadMoins > 1) {
-                    builder.setContentTitle(getString(R.string.main_action_name_multiple, unreadMoins));
+                    builder.setContentTitle(getString(R.string.notification_main_action_name_multiple, unreadMoins));
                 }
                 try {
                     String url = GravatarApi.getGravatarURL(sender.email_hash, getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width));

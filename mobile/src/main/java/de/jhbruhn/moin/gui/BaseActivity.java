@@ -1,6 +1,5 @@
 package de.jhbruhn.moin.gui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
@@ -22,5 +21,5 @@ public abstract class BaseActivity extends ActionBarActivity {
         ButterKnife.inject(this);
     }
 
-    public abstract int getLayoutId();
+    protected abstract int getLayoutId();
 }

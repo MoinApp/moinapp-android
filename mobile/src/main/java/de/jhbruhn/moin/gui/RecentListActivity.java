@@ -3,19 +3,14 @@ package de.jhbruhn.moin.gui;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
-import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,7 +29,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.melnykov.fab.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +51,8 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class RecentListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, UserRecyclerViewAdapter.UserRecyclerViewClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
-    public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     @Inject
     MoinService mMoinService;
@@ -223,7 +215,7 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regid);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
+        editor.apply();
     }
 
     private SharedPreferences getGCMPreferences(Context context) {

@@ -8,8 +8,6 @@ import de.jhbruhn.moin.data.Session;
 import de.jhbruhn.moin.data.User;
 import retrofit.Callback;
 import retrofit.http.Body;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.POST;

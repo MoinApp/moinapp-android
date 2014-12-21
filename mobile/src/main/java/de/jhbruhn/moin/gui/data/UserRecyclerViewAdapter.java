@@ -1,7 +1,6 @@
 package de.jhbruhn.moin.gui.data;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +28,8 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     }
 
     private List<User> mUsers;
-    private UserRecyclerViewClickListener mClickListener;
-    private Picasso mPicasso;
+    private final UserRecyclerViewClickListener mClickListener;
+    private final Picasso mPicasso;
 
     public UserRecyclerViewAdapter(List<User> users, Picasso picasso, UserRecyclerViewClickListener clickListener) {
         this.mUsers = users;

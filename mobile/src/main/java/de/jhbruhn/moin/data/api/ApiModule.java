@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Type;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -23,10 +21,8 @@ import de.jhbruhn.moin.gcm.ReMoinReceiver;
 import de.jhbruhn.moin.gui.RecentListActivity;
 import de.jhbruhn.moin.gui.SignInActivity;
 import retrofit.RestAdapter;
-import retrofit.converter.ConversionException;
 import retrofit.converter.Converter;
 import retrofit.converter.GsonConverter;
-import retrofit.mime.TypedInput;
 
 /**
  * Created by Jan-Henrik on 19.12.2014.

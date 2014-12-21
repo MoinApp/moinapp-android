@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import dagger.ObjectGraph;
-import dagger.internal.Modules;
 import de.jhbruhn.moin.data.api.ApiModule;
 
 /**
@@ -25,7 +24,7 @@ public class MoinApplication extends Application {
         inject(this);
     }
 
-    protected List<Object> getModules() {
+    List<Object> getModules() {
 
         return Arrays.asList(
                 new ApiModule(),

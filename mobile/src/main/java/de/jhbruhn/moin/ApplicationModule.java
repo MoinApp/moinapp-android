@@ -6,7 +6,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import de.jhbruhn.moin.data.api.ApiModule;
 
 /**
  * Created by Jan-Henrik on 20.12.2014.
