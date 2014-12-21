@@ -58,6 +58,13 @@ public class ApiModule {
 
     @Provides
     @Singleton
+    @Named("gcm")
+    SharedPreferences provideGCMPreferences(Application application) {
+        return application.getSharedPreferences(RecentListActivity.class.getSimpleName(), Application.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Singleton
     Converter provideResponseConverter() {
         return new GsonConverter(new Gson());
     }

@@ -61,6 +61,10 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     @Inject
     @Named("unreadMoins")
     SharedPreferences mPreferencesUnreadMoins;
+    @Inject
+    @Named("gcm")
+    SharedPreferences mPreferencesGcm;
+
 
     AccountManager mAccountManager;
 
@@ -209,29 +213,22 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     }
 
     private void storeRegistrationId(String regid) {
-        final SharedPreferences prefs = getGCMPreferences(this);
         int appVersion = getAppVersion(this);
         Log.i("GCM", "Saving regId on app version " + appVersion);
-        SharedPreferences.Editor editor = prefs.edit();
+        SharedPreferences.Editor editor = mPreferencesGcm.edit();
         editor.putString(PROPERTY_REG_ID, regid);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.apply();
     }
 
-    private SharedPreferences getGCMPreferences(Context context) {
-        return getSharedPreferences(RecentListActivity.class.getSimpleName(),
-                Context.MODE_PRIVATE);
-    }
-
     private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGCMPreferences(context);
-        String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+        String registrationId = mPreferencesGcm.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
             Log.i("GCM", "Registration not found.");
             return "";
         }
 
-        int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+        int registeredVersion = mPreferencesGcm.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
         int currentVersion = getAppVersion(context);
         if (registeredVersion != currentVersion) {
             Log.i("GCM", "App version changed.");
