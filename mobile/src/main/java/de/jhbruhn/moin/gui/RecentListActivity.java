@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
+import android.widget.ViewFlipper;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.melnykov.fab.FloatingActionButton;
@@ -54,6 +55,11 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
 
+    private static final int VIEW_FLIPPER_ITEM_LIST = 0;
+    private static final int VIEW_FLIPPER_ITEM_LOADING = 1;
+    private static final int VIEW_FLIPPER_ITEM_EMPTY = 2;
+    private static final int VIEW_FLIPPER_ITEM_NO_RESULTS = 3;
+
     @Inject
     MoinService mMoinService;
     @Inject
@@ -74,6 +80,8 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     FloatingActionButton mAddFriendButton;
     @InjectView(R.id.recent_list_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    @InjectView(R.id.recent_list_view_flipper)
+    ViewFlipper mViewFlipper;
 
     private String mAuthToken;
     private UserRecyclerViewAdapter mRecentUsersAdapter;
@@ -106,6 +114,8 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
+
+        mViewFlipper.setDisplayedChild(VIEW_FLIPPER_ITEM_LOADING);
 
         logInCreateIfNeeded();
         markAllMoinsAsRead();
@@ -267,6 +277,11 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     private void populateRecentsList(List<User> recents) {
         mRecentUsersAdapter.setUsers(recents);
         mLastRecents = recents;
+        if(recents.size() == 0) {
+            mViewFlipper.setDisplayedChild(VIEW_FLIPPER_ITEM_EMPTY);
+        } else {
+            mViewFlipper.setDisplayedChild(VIEW_FLIPPER_ITEM_LIST);
+        }
     }
 
     @OnClick(R.id.recent_list_add_friend_button)
@@ -322,11 +337,17 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     public boolean onQueryTextChange(String s) {
         if(s.isEmpty()) return true;
         mSwipeRefreshLayout.setEnabled(false);
+        mViewFlipper.setDisplayedChild(VIEW_FLIPPER_ITEM_LOADING);
         mMoinService.findUser(mAuthToken, s, new Callback<List<User>>() {
 
             @Override
             @DebugLog
             public void success(List<User> users, Response response) {
+                if(users.size() == 0) {
+                    mViewFlipper.setDisplayedChild(VIEW_FLIPPER_ITEM_NO_RESULTS);
+                } else {
+                    mViewFlipper.setDisplayedChild(VIEW_FLIPPER_ITEM_LIST);
+                }
                 mRecentUsersAdapter.setUsers(users);
             }
 
