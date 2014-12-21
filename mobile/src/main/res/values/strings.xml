@@ -7,6 +7,7 @@
     <string name="activity_recent_list_empty_text">Moin!\n You haven\'t moined anyone yet. To moin someone, just tap on the \'Add\' Button and search for his name.</string>
     <string name="activity_recent_list_action_sign_out">Sign Out</string>
     <string name="activity_recent_list_action_add_friend">Add Friend</string>
+    <string name="activity_recent_list_no_results_text">No users were found.</string>
 
     <string name="activity_sign_in_title">Sign In</string>
     <string name="activity_sign_in_username">Username</string>
@@ -16,11 +17,15 @@
     <string name="activity_sign_in_intro_text">To start moining your friends, please either sign in with your existing account or register a new one.</string>
     <string name="activity_sign_in_action_register">Register</string>
     <string name="activity_sign_in_email">E-Mail Address</string>
+    <string name="activity_sign_in_error_no_username">The username is missing.</string>
+    <string name="activity_sign_in_error_no_password">The password is missing.</string>
+    <string name="activity_sign_in_error_no_email">The email address is missing.</string>
 
     <string name="notification_main_action_name">Moin</string>
     <string name="notification_main_action_name_multiple">Moin (%d)</string>
     <string name="notification_sent_by">by %s</string>
     <string name="notification_action_reply">ReMoin</string>
-    <string name="activity_recent_list_no_results_text">No users were found.</string>
+
+    <string name="ok">OK</string>
 
 </resources>

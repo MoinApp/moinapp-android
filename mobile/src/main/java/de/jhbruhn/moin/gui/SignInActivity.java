@@ -3,6 +3,7 @@ package de.jhbruhn.moin.gui;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import de.jhbruhn.moin.MoinApplication;
 import de.jhbruhn.moin.R;
+import de.jhbruhn.moin.data.MoinError;
 import de.jhbruhn.moin.data.Session;
 import de.jhbruhn.moin.data.User;
 import de.jhbruhn.moin.data.api.MoinService;
@@ -70,11 +72,42 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         mAccountManager = AccountManager.get(this);
     }
 
+    private void showAlertDialog(int errorTitle, int errorText) {
+        showAlertDialog(getString(errorTitle), getString(errorText));
+    }
+
+    private void showAlertDialog(String title, String text) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(text)
+                .setTitle(title);
+
+        builder.setNeutralButton(R.string.ok, null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     @OnClick(R.id.sign_in_action_register)
     public void actionRegister() {
         final String username = mRegisterUsername.getText().toString();
         final String password = mRegisterPassword.getText().toString();
         final String email = mRegisterEmail.getText().toString();
+
+        if(username.isEmpty()) {
+            mRegisterUsername.setError(getString(R.string.activity_sign_in_error_no_username));
+            return;
+        }
+
+        if(password.isEmpty()) {
+            mRegisterPassword.setError(getString(R.string.activity_sign_in_error_no_password));
+            return;
+        }
+
+        if(email.isEmpty()) {
+            mRegisterEmail.setError(getString(R.string.activity_sign_in_error_no_email));
+            return;
+        }
 
         final String accountType = getIntent().getStringExtra(ARG_ACCOUNT_TYPE);
 
@@ -103,6 +136,10 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             public void failure(RetrofitError error) {
                 mSignInButton.setEnabled(true);
                 mRegisterButton.setEnabled(true);
+
+                MoinError e = (MoinError) error.getBodyAs(MoinError.class);
+                showAlertDialog("Error!", e.message);
+
                 error.printStackTrace(); //TODO: Handle the error.
             }
         });
@@ -112,6 +149,16 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     public void actionSignIn() {
         final String username = mUsername.getText().toString();
         final String password = mPassword.getText().toString();
+
+        if(username.isEmpty()) {
+            mUsername.setError(getString(R.string.activity_sign_in_error_no_username));
+            return;
+        }
+
+        if(password.isEmpty()) {
+            mPassword.setError(getString(R.string.activity_sign_in_error_no_password));
+            return;
+        }
 
         final String accountType = getIntent().getStringExtra(ARG_ACCOUNT_TYPE);
 
@@ -137,6 +184,10 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             public void failure(RetrofitError error) {
                 mSignInButton.setEnabled(true);
                 mRegisterButton.setEnabled(true);
+                
+                MoinError e = (MoinError) error.getBodyAs(MoinError.class);
+                showAlertDialog("Error!", e.message);
+
                 error.printStackTrace(); //TODO: Handle the error.
             }
         });
