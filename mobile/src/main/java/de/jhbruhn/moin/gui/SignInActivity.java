@@ -140,7 +140,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 MoinError e = (MoinError) error.getBodyAs(MoinError.class);
                 showAlertDialog("Error!", e.message);
 
-                error.printStackTrace(); //TODO: Handle the error.
+                error.printStackTrace();
             }
         });
     }
@@ -184,11 +184,11 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             public void failure(RetrofitError error) {
                 mSignInButton.setEnabled(true);
                 mRegisterButton.setEnabled(true);
-                
+
                 MoinError e = (MoinError) error.getBodyAs(MoinError.class);
                 showAlertDialog("Error!", e.message);
 
-                error.printStackTrace(); //TODO: Handle the error.
+                error.printStackTrace();
             }
         });
     }
