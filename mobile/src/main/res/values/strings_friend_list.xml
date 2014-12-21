@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="action_friend_list_search">Search</string>
-    <string name="action_friend_list_logout">Sign Out</string>
-    <string name="friend_list_intro_text">To Moin your friends, simply tap on them!</string>
-    <string name="friend_list_add_friend">Add Friend</string>
-</resources>

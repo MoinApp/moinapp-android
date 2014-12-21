@@ -1,1 +1,1 @@
-include ':mobile', ':wear', ':greendao-generator'
+include ':mobile', ':wear'

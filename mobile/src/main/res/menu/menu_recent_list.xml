@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="de.jhbruhn.moin.gui.RecentListActivity">
+    <item android:id="@+id/recent_list_action_search"
+        android:title="@string/action_add_friend"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="collapseActionView|never"
+        app:actionViewClass="android.widget.SearchView" />
+    <item android:id="@+id/recent_list_action_signout"
+        android:title="@string/action_sign_out"
+        app:showAsAction="never" />
+</menu>
