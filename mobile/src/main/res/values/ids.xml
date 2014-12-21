@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="google_cloud_id">720362445613</string>
+    <string name="google_cloud_id" translatable="false">720362445613</string>
 </resources>
