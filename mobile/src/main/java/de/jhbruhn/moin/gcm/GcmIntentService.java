@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -28,6 +29,8 @@ import de.jhbruhn.moin.gui.RecentListActivity;
 public class GcmIntentService extends IntentService {
 
     private static final String NOTIFICATION_GROUP = "MOIN";
+
+    private static final int[] MOIN_SOUNDS = {R.raw.moin1, R.raw.moin3, R.raw.moin4, R.raw.moin5};
 
     @Inject
     @Named("unreadMoins")
@@ -72,6 +75,7 @@ public class GcmIntentService extends IntentService {
                         .setNumber(unreadMoins)
                         .setContentTitle(getString(R.string.notification_main_action_name))
                         .setSmallIcon(R.drawable.ic_launcher)
+                        .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + MOIN_SOUNDS[((int) Math.floor(Math.random() * MOIN_SOUNDS.length))]))
                         .setContentText(getString(R.string.notification_sent_by, sender.username));
 
                 Intent resultIntent = new Intent(this, RecentListActivity.class);
@@ -95,17 +99,16 @@ public class GcmIntentService extends IntentService {
                 }
                 try {
                     String url = GravatarApi.getGravatarURL(sender.email_hash, getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width));
-                    Bitmap smallBmp = mPicasso.load(url).get();
+                    Bitmap smallBmp = mPicasso.load(url).error(R.drawable.default_avatar).get();
                     builder.setLargeIcon(smallBmp);
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
 
                 try {
                     String url = GravatarApi.getGravatarURL(sender.email_hash, 256);
                     Bitmap largeBmp;
 
-                    largeBmp = mPicasso.load(url).get();
+                    largeBmp = mPicasso.load(url).error(R.drawable.default_avatar).get();
 
                     NotificationCompat.WearableExtender wearableExtender =
                             new NotificationCompat.WearableExtender()
@@ -113,7 +116,6 @@ public class GcmIntentService extends IntentService {
 
                     builder.extend(wearableExtender);
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
 
                 mNotificationManager.notify(sender.getCrazyId(), builder.build());
