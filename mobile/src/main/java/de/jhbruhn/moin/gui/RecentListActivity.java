@@ -93,12 +93,6 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(android.os.Build.VERSION.SDK_INT >= 21) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            getWindow().setExitTransition(new Explode());
-            getWindow().setEnterTransition(new Explode());
-        }
-
         super.onCreate(savedInstanceState);
 
 
