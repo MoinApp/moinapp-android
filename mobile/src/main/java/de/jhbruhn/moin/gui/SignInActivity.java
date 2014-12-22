@@ -33,15 +33,10 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     public final static String ARG_ACCOUNT_NAME = "ACCOUNT_NAME";
     public final static String ARG_IS_ADDING_NEW_ACCOUNT = "IS_ADDING_ACCOUNT";
 
-    public static final String KEY_ERROR_MESSAGE = "ERR_MSG";
-
     public final static String PARAM_USER_PASS = "USER_PASS";
-
-    private final int REQ_SIGNUP = 1;
 
     @Inject
     MoinService mMoinService;
-
 
 
     @InjectView(R.id.sign_in_username)
@@ -72,10 +67,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
         mAuthTokenType = getIntent().getStringExtra(ARG_AUTH_TYPE);
         mAccountManager = AccountManager.get(this);
-    }
-
-    private void showAlertDialog(int errorTitle, int errorText) {
-        showAlertDialog(getString(errorTitle), getString(errorText));
     }
 
     private void showAlertDialog(String title, String text) {
@@ -113,8 +104,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
         final String accountType = getIntent().getStringExtra(ARG_ACCOUNT_TYPE);
 
-        final Bundle data = new Bundle();
-
         mSignInButton.setEnabled(false);
         mRegisterButton.setEnabled(false);
 
@@ -124,14 +113,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         mMoinService.register(u, new Callback<Session>() {
             @Override
             public void success(Session session, Response response) {
-                data.putString(AccountManager.KEY_ACCOUNT_NAME, username);
-                data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-                data.putString(AccountManager.KEY_AUTHTOKEN, session.token);
-                data.putString(PARAM_USER_PASS, password);
-
-                final Intent res = new Intent();
-                res.putExtras(data);
-                finishLogin(res);
+                finishLogin(username, accountType, session.token, password);
             }
 
             @Override
@@ -164,7 +146,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
         final String accountType = getIntent().getStringExtra(ARG_ACCOUNT_TYPE);
 
-        final Bundle data = new Bundle();
 
         mSignInButton.setEnabled(false);
         mRegisterButton.setEnabled(false);
@@ -172,14 +153,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         mMoinService.authenticate(new User(username, password), new Callback<Session>() {
             @Override
             public void success(Session session, Response response) {
-                data.putString(AccountManager.KEY_ACCOUNT_NAME, username);
-                data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-                data.putString(AccountManager.KEY_AUTHTOKEN, session.token);
-                data.putString(PARAM_USER_PASS, password);
 
-                final Intent res = new Intent();
-                res.putExtras(data);
-                finishLogin(res);
+                finishLogin(username, accountType, session.token, password);
             }
 
             @Override
@@ -196,9 +171,16 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         });
     }
 
-    private void finishLogin(Intent intent) {
-        String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-        String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
+    private void finishLogin(String accountName, String accountType, String authToken, String accountPassword) {
+        final Bundle data = new Bundle();
+
+        data.putString(AccountManager.KEY_ACCOUNT_NAME, accountName);
+        data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+        data.putString(AccountManager.KEY_AUTHTOKEN, authToken);
+        data.putString(PARAM_USER_PASS, accountPassword);
+
+        Intent intent = new Intent();
+        intent.putExtras(data);
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
 
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
