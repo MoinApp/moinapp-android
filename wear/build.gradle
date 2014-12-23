@@ -26,4 +26,7 @@ dependencies {
 
     compile 'com.google.android.support:wearable:1.1.0'
     compile 'com.google.android.gms:play-services-wearable:6.1.71'
+
+    compile 'com.pkmmte.view:circularimageview:1.1'
+
 }
