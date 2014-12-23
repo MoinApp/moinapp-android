@@ -33,3 +33,4 @@ deploy:
     repo: MoinApp/moinapp-android
     tags: true
     all_branches: true
+
