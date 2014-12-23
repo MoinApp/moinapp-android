@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Moin</string>
-
     <string name="activity_recent_list_action_add_friend">Freund hinzufügen</string>
     <string name="activity_recent_list_action_sign_out">Ausloggen</string>
     <string name="activity_recent_list_empty_text">Moin!\nKlicke auf den \'+\'-Button, um jemanden zu suchen und ihn anzumoinen.</string>

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Moin</string>
-
     <string name="activity_recent_list_title">Moin</string>
     <string name="activity_recent_list_empty_text">Moin!\n You haven\'t moined anyone yet. To moin someone, just tap on the \'Add\' Button and search for his name.</string>
     <string name="activity_recent_list_action_sign_out">Sign Out</string>
