@@ -21,6 +21,7 @@ import de.jhbruhn.moin.data.MoinError;
 import de.jhbruhn.moin.data.Session;
 import de.jhbruhn.moin.data.User;
 import de.jhbruhn.moin.data.api.MoinService;
+import de.jhbruhn.moin.data.auth.AccountGeneral;
 import hugo.weaving.DebugLog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -66,6 +67,11 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         ButterKnife.inject(this);
 
         mAuthTokenType = getIntent().getStringExtra(ARG_AUTH_TYPE);
+
+        if(mAuthTokenType == null) {
+            mAuthTokenType = AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
+        }
+
         mAccountManager = AccountManager.get(this);
     }
 
