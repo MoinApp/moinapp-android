@@ -20,6 +20,7 @@ import de.jhbruhn.moin.gcm.GcmIntentService;
 import de.jhbruhn.moin.gcm.ReMoinReceiver;
 import de.jhbruhn.moin.gui.RecentListActivity;
 import de.jhbruhn.moin.gui.SignInActivity;
+import de.jhbruhn.moin.wear.RecentListFetchingService;
 import retrofit.RestAdapter;
 import retrofit.converter.Converter;
 import retrofit.converter.GsonConverter;
@@ -38,7 +39,8 @@ import retrofit.converter.GsonConverter;
                 MoinAccountAuthenticator.class,
                 MoinAccountAuthenticatorService.class,
                 GcmIntentService.class,
-                ReMoinReceiver.class
+                ReMoinReceiver.class,
+                RecentListFetchingService.class
         }
 )
 public class ApiModule {

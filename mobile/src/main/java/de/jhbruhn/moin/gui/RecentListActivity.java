@@ -5,6 +5,7 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -15,13 +16,11 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Explode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.ViewFlipper;
@@ -47,6 +46,7 @@ import de.jhbruhn.moin.data.User;
 import de.jhbruhn.moin.data.api.MoinService;
 import de.jhbruhn.moin.data.auth.AccountGeneral;
 import de.jhbruhn.moin.gui.data.UserRecyclerViewAdapter;
+import de.jhbruhn.moin.wear.RecentListFetchingService;
 import hugo.weaving.DebugLog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -114,6 +114,8 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
 
         logInCreateIfNeeded();
         markAllMoinsAsRead();
+
+        startService(new Intent(this, RecentListFetchingService.class));
     }
 
     private void markAllMoinsAsRead() {

@@ -2,6 +2,7 @@ package de.jhbruhn.moin.data.api;
 
 import java.util.List;
 
+import de.jhbruhn.moin.data.User;
 import de.jhbruhn.moin.data.GCMToken;
 import de.jhbruhn.moin.data.Moin;
 import de.jhbruhn.moin.data.Session;
@@ -38,6 +39,9 @@ public interface MoinService {
 
     @GET("/user/recents")
     void getRecents(@Header("Authorization") String session, Callback<List<User>> callback);
+
+    @GET("/user/recents")
+    List<User> getRecents(@Header("Authorization") String session);
 
     @POST("/user/addgcm")
     GCMToken addGCMID(@Header("Authorization") String session, @Body GCMToken gcmToken);
