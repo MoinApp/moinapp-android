@@ -2,7 +2,10 @@ language: android
 sudo: false
 cache:
   directories:
-  - /home/travis/.gradle
+  - $HOME/.gradle
+  - build/
+  - mobile/build/
+  - wear/build/
 android:
   components:
   - android-21
