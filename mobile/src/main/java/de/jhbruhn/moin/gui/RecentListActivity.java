@@ -108,7 +108,7 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
         mAddFriendButton.attachToRecyclerView(mRecentListRecyclerView);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 
         mViewFlipper.setDisplayedChild(VIEW_FLIPPER_ITEM_LOADING);
 
