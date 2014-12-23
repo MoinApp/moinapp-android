@@ -20,8 +20,6 @@ public class RecentUsersWearableListItemLayout extends LinearLayout implements W
     private TextView mName;
 
     private final float mFadedTextAlpha;
-    private final int mFadedCircleColor;
-    private final int mChosenCircleColor;
 
     public RecentUsersWearableListItemLayout(Context context) {
         this(context, null);
@@ -36,8 +34,6 @@ public class RecentUsersWearableListItemLayout extends LinearLayout implements W
         super(context, attrs, defStyle);
 
         mFadedTextAlpha = 75 / 100f;
-        mFadedCircleColor = Color.GRAY;
-        mChosenCircleColor = Color.WHITE;
     }
 
     @Override
@@ -50,12 +46,10 @@ public class RecentUsersWearableListItemLayout extends LinearLayout implements W
     @Override
     public void onCenterPosition(boolean b) {
         mName.setAlpha(1f);
-        mCircle.getDrawable().setColorFilter(mChosenCircleColor, PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
     public void onNonCenterPosition(boolean b) {
-        mCircle.getDrawable().setColorFilter(mFadedCircleColor, PorterDuff.Mode.MULTIPLY);
         mName.setAlpha(mFadedTextAlpha);
     }
 }
