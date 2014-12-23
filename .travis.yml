@@ -1,5 +1,8 @@
 language: android
 sudo: false
+cache:
+  directories:
+  - /home/travis/.gradle
 android:
   components:
   - android-21
