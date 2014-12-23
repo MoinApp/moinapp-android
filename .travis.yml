@@ -1,5 +1,10 @@
 language: android
 sudo: false
+cache:
+  directories:
+  - build/
+  - mobile/build/
+  - wear/build/
 android:
   components:
   - android-21
