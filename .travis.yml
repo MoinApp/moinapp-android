@@ -1,11 +1,5 @@
 language: android
 sudo: false
-cache:
-  directories:
-  - $HOME/.gradle
-  - build/
-  - mobile/build/
-  - wear/build/
 android:
   components:
   - android-21
