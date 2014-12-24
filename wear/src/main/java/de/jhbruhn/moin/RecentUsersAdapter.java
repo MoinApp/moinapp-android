@@ -60,7 +60,8 @@ public class RecentUsersAdapter extends WearableListView.Adapter {
             itemHolder.imageView.setImageBitmap(user.avatar);
         else
             itemHolder.imageView.setImageResource(R.drawable.default_avatar);
-        holder.itemView.setTag(position);
+
+        holder.itemView.setTag(user);
     }
 
 

@@ -1,9 +1,11 @@
 package de.jhbruhn.moin;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.wearable.activity.ConfirmationActivity;
 import android.support.wearable.view.WatchViewStub;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
@@ -18,13 +20,19 @@ import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataItemBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import de.jhbruhn.moin.data.Constants;
 import de.jhbruhn.moin.data.User;
 
 public class RecentListActivity extends Activity implements WearableListView.ClickListener {
@@ -89,7 +97,7 @@ public class RecentListActivity extends Activity implements WearableListView.Cli
                                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItems.get(i));
                                 Log.d(TAG, "dataitem: " + dataMapItem.getUri());
 
-                                if(dataMapItem.getUri().toString().contains("/recents")) {
+                                if(dataMapItem.getUri().toString().contains(Constants.DATA_PATH_RECENTS)) {
                                     List<DataMap> recentDataMaps = dataMapItem.getDataMap().getDataMapArrayList("recents");
                                     Log.d(TAG, "dataitems: " + recentDataMaps.size());
 
@@ -153,7 +161,41 @@ public class RecentListActivity extends Activity implements WearableListView.Cli
 
     @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {
+        final User u = (User) viewHolder.itemView.getTag();
+        new Thread() {
+            @Override
+            public void run() {
+                sendMoin(u);
+            }
+        }.start();
+    }
 
+    private void sendMoin(User u) {
+        for(String n : getNodes()) {
+
+            Wearable.MessageApi.sendMessage(mGoogleApiClient, n, Constants.MESSAGE_PATH_MOIN, u.username.getBytes()).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
+                @Override
+                public void onResult(MessageApi.SendMessageResult sendMessageResult) {
+                    Intent intent = new Intent(RecentListActivity.this, ConfirmationActivity.class);
+                    intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
+                            ConfirmationActivity.SUCCESS_ANIMATION);
+                    intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,
+                            getString(R.string.successful_action));
+                    startActivity(intent);
+                    RecentListActivity.this.finish();
+                }
+            });
+        }
+    }
+
+    private Collection<String> getNodes() {
+        HashSet <String>results = new HashSet<String>();
+        NodeApi.GetConnectedNodesResult nodes =
+                Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
+        for (Node node : nodes.getNodes()) {
+            results.add(node.getId());
+        }
+        return results;
     }
 
     @Override

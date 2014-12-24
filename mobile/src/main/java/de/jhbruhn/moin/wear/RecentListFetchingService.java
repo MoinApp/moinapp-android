@@ -32,6 +32,7 @@ import javax.inject.Inject;
 
 import de.jhbruhn.moin.MoinApplication;
 import de.jhbruhn.moin.api.GravatarApi;
+import de.jhbruhn.moin.data.Constants;
 import de.jhbruhn.moin.data.User;
 import de.jhbruhn.moin.data.api.MoinService;
 import de.jhbruhn.moin.data.auth.AccountGeneral;
@@ -41,7 +42,6 @@ import de.jhbruhn.moin.data.auth.AccountGeneral;
  */
 public class RecentListFetchingService extends IntentService implements GoogleApiClient.ConnectionCallbacks {
 
-    private static final String DATA_PATH_RECENTS = "/recents";
 
     private static final String TAG = "RECENTS";
 
@@ -132,7 +132,7 @@ public class RecentListFetchingService extends IntentService implements GoogleAp
                             recentUserMaps.add(m);
                         }
 
-                        PutDataMapRequest dataMap = PutDataMapRequest.create(DATA_PATH_RECENTS);
+                        PutDataMapRequest dataMap = PutDataMapRequest.create(Constants.DATA_PATH_RECENTS);
                         dataMap.getDataMap().putDataMapArrayList("recents", recentUserMaps);
 
                         PutDataRequest request = dataMap.asPutDataRequest();

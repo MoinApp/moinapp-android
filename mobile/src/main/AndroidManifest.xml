@@ -70,6 +70,12 @@
         <service android:name=".wear.RecentListFetchingService" >
         </service>
 
+        <service android:name=".wear.MoinWearableListenerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
+        </service>
+
         <receiver
             android:name=".gcm.ReMoinReceiver"
             android:enabled="true"

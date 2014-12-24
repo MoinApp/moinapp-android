@@ -51,7 +51,8 @@ public class ReMoinReceiver extends BroadcastReceiver {
         final String receiver = intent.getStringExtra(KEY_USERNAME);
         Integer notificationId = intent.getIntExtra(KEY_NOTIFICATION_ID, 0);
 
-        mPreferencesUnreadMoins.edit().putInt(receiver, 0).apply();
+        if(notificationId > 0)
+            mPreferencesUnreadMoins.edit().putInt(receiver, 0).apply();
 
         AccountManager accountManager = AccountManager.get(context);
         Account[] accounts = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE);
