@@ -5,17 +5,41 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.1"
 
+    project.ext.vCode = 1
+    try {
+        project.ext.vCode = Integer.valueOf(System.getenv("TRAVIS_BUILD_NUMBER"))
+    } catch (e) {
+    }
+    project.ext.vName = System.getenv("TRAVIS_TAG")
+    if (!project.ext.vName) {
+        project.ext.vName = "1.0.0"
+    } else {
+        project.ext.vName = project.ext.vName.replace("v", "")
+    }
+
     defaultConfig {
         applicationId "de.jhbruhn.moin"
         minSdkVersion 21
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode project.ext.vCode
+        versionName project.ext.vName + "-wear"
+    }
+    signingConfigs {
+        release {
+            storeFile file('../moin.jks')
+            storePassword 'moinsen'
+            keyAlias 'moin'
+            keyPassword 'moinsen'
+        }
     }
     buildTypes {
         release {
-            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            minifyEnabled false
+
+        }
+        debug {
         }
     }
 }
