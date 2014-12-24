@@ -7,7 +7,7 @@ public class GravatarApi {
     private static final String GRAVATAR_BASE = "https://www.gravatar.com/avatar/";
 
     public static String getGravatarURL(String emailHash) {
-        return getGravatarURL(emailHash, 512);
+        return getGravatarURL(emailHash, 256);
     }
     public static String getGravatarURL(String emailHash, int size) {
         return GRAVATAR_BASE + emailHash + "?s=" + size + "&d=404";
