@@ -17,11 +17,9 @@ import de.jhbruhn.moin.data.User;
  */
 public class RecentUsersAdapter extends WearableListView.Adapter {
     private List<User> mDataset;
-    private final Context mContext;
     private final LayoutInflater mInflater;
 
     public RecentUsersAdapter(Context context, List<User> dataset) {
-        mContext = context;
         mInflater = LayoutInflater.from(context);
         mDataset = dataset;
     }
@@ -34,6 +32,7 @@ public class RecentUsersAdapter extends WearableListView.Adapter {
     public static class ItemViewHolder extends WearableListView.ViewHolder {
         private TextView textView;
         private ImageView imageView;
+
         public ItemViewHolder(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.name);
@@ -56,10 +55,12 @@ public class RecentUsersAdapter extends WearableListView.Adapter {
         ItemViewHolder itemHolder = (ItemViewHolder) holder;
 
         itemHolder.textView.setText(user.username);
-        if(user.avatar != null)
+
+        if(user.avatar != null) {
             itemHolder.imageView.setImageBitmap(user.avatar);
-        else
+        } else {
             itemHolder.imageView.setImageResource(R.drawable.default_avatar);
+        }
 
         holder.itemView.setTag(user);
     }
