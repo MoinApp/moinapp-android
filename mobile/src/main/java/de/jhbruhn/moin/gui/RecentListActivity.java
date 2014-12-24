@@ -61,6 +61,9 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     private static final int VIEW_FLIPPER_ITEM_EMPTY = 2;
     private static final int VIEW_FLIPPER_ITEM_NO_RESULTS = 3;
 
+    private static final String STATE_AUTH_TOKEN = "auth_token";
+    private static final String STATE_RECENT_USERS = "recent";
+
     @Inject
     MoinService mMoinService;
     @Inject
@@ -92,9 +95,8 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     private List<User> mLastRecents = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    protected void onCreate(Bundle inState) {
+        super.onCreate(inState);
 
         mAccountManager = AccountManager.get(this);
 
@@ -110,10 +112,30 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 
-        mViewFlipper.setDisplayedChild(VIEW_FLIPPER_ITEM_LOADING);
 
-        logInCreateIfNeeded();
+        if(inState != null) {
+            mAuthToken = inState.getString(STATE_AUTH_TOKEN);
+            mLastRecents = inState.getParcelableArrayList(STATE_RECENT_USERS);
+
+            mRecentUsersAdapter.setUsers(mLastRecents);
+
+            registerGCMId();
+            loadRecents();
+        } else {
+            mViewFlipper.setDisplayedChild(VIEW_FLIPPER_ITEM_LOADING);
+            logInCreateIfNeeded();
+
+        }
+
         markAllMoinsAsRead();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(STATE_AUTH_TOKEN, mAuthToken);
+        outState.putParcelableArrayList(STATE_RECENT_USERS, (ArrayList<? extends android.os.Parcelable>) mLastRecents);
+
+        super.onSaveInstanceState(outState);
     }
 
     private void markAllMoinsAsRead() {

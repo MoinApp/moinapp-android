@@ -2,11 +2,13 @@ package de.jhbruhn.moin.data;
 
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Jan-Henrik on 19.12.2014.
  */
-public class User {
+public class User implements Parcelable {
     public String username;
     public String password;
     public String email_hash;
@@ -19,6 +21,14 @@ public class User {
         this.password = password;
     }
 
+    public User(Parcel in) {
+        this.username = in.readString();
+        this.password = in.readString();
+        this.email_hash = in.readString();
+        this.id = in.readString();
+        this.email = in.readString();
+    }
+
     public int getCrazyId() {
         int sum = 0;
         for(Character c : id.toCharArray())
@@ -28,6 +38,28 @@ public class User {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(username);
+        parcel.writeString(password);
+        parcel.writeString(email_hash);
+        parcel.writeString(id);
+        parcel.writeString(email);
+    }
 
+    public static final Parcelable.Creator<User> CREATOR
+            = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }
