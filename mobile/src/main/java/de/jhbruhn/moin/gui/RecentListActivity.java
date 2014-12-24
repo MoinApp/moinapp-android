@@ -114,8 +114,6 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
 
         logInCreateIfNeeded();
         markAllMoinsAsRead();
-
-        startService(new Intent(this, RecentListFetchingService.class));
     }
 
     private void markAllMoinsAsRead() {
@@ -181,6 +179,7 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
                         try {
                             bnd = future.getResult();
                             mAuthToken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
+                            startService(new Intent(RecentListActivity.this, RecentListFetchingService.class));
                             registerGCMId();
                             loadRecents();
                         } catch (Exception e) {
