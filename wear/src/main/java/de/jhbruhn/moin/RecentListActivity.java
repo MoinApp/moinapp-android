@@ -42,6 +42,7 @@ public class RecentListActivity extends Activity implements WearableListView.Cli
     private GoogleApiClient mGoogleApiClient;
 
     private RecentUsersAdapter mAdapter;
+    private boolean mClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +161,12 @@ public class RecentListActivity extends Activity implements WearableListView.Cli
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(mClicked) finish();
+    }
+
+    @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {
         final User u = (User) viewHolder.itemView.getTag();
         new Thread() {
@@ -171,6 +178,7 @@ public class RecentListActivity extends Activity implements WearableListView.Cli
     }
 
     private void sendMoin(User u) {
+        mClicked = true;
         for(String n : getNodes()) {
 
             Wearable.MessageApi.sendMessage(mGoogleApiClient, n, Constants.MESSAGE_PATH_MOIN, u.username.getBytes()).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
@@ -182,7 +190,6 @@ public class RecentListActivity extends Activity implements WearableListView.Cli
                     intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,
                             getString(R.string.successful_action));
                     startActivity(intent);
-                    RecentListActivity.this.finish();
                 }
             });
         }
