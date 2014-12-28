@@ -71,4 +71,5 @@ dependencies {
 
     compile 'com.pkmmte.view:circularimageview:1.1'
     compile 'com.melnykov:floatingactionbutton:1.1.0'
+    compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.2'
 }

@@ -1,4 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -50,7 +51,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
 
-        <Button
+        <com.dd.processbutton.iml.ActionProcessButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_sign_in_action_sign_in"
@@ -90,7 +91,7 @@
             android:layout_alignParentStart="true"
             android:inputType="textEmailAddress" />
 
-        <Button
+        <com.dd.processbutton.iml.ActionProcessButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_sign_in_action_register"

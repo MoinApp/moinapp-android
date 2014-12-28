@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.dd.processbutton.FlatButton;
+import com.dd.processbutton.ProcessButton;
+import com.dd.processbutton.iml.ActionProcessButton;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -44,7 +48,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     @InjectView(R.id.sign_in_password)
     EditText mPassword;
     @InjectView(R.id.sign_in_action_sign_in)
-    Button mSignInButton;
+    ActionProcessButton mSignInButton;
 
     @InjectView(R.id.register_username)
     EditText mRegisterUsername;
@@ -53,7 +57,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     @InjectView(R.id.register_email)
     EditText mRegisterEmail;
     @InjectView(R.id.sign_in_action_register)
-    Button mRegisterButton;
+    ActionProcessButton mRegisterButton;
 
     private String mAuthTokenType;
     private AccountManager mAccountManager;
@@ -112,12 +116,17 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         mSignInButton.setEnabled(false);
         mRegisterButton.setEnabled(false);
 
+        mRegisterButton.setMode(ActionProcessButton.Mode.ENDLESS);
+        mRegisterButton.setProgress(1);
+
         User u = new User(username, password);
         u.email = email;
 
         mMoinService.register(u, new Callback<Session>() {
             @Override
             public void success(Session session, Response response) {
+                mRegisterButton.setProgress(100);
+
                 finishLogin(username, accountType, session.token, password);
             }
 
@@ -128,6 +137,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
                 MoinError e = (MoinError) error.getBodyAs(MoinError.class);
                 showAlertDialog("Error!", e.message);
+
+                mRegisterButton.setProgress(-1);
 
                 error.printStackTrace();
             }
@@ -155,10 +166,13 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         mSignInButton.setEnabled(false);
         mRegisterButton.setEnabled(false);
 
+        mSignInButton.setMode(ActionProcessButton.Mode.ENDLESS);
+        mSignInButton.setProgress(1);
+
         mMoinService.authenticate(new User(username, password), new Callback<Session>() {
             @Override
             public void success(Session session, Response response) {
-
+                mSignInButton.setProgress(100);
                 finishLogin(username, accountType, session.token, password);
             }
 
@@ -170,7 +184,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
                 MoinError e = (MoinError) error.getBodyAs(MoinError.class);
                 showAlertDialog("Error!", e.message);
-
+                mSignInButton.setProgress(-1);
                 error.printStackTrace();
             }
         });
