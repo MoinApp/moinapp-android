@@ -24,10 +24,10 @@
     <string name="notification_action_reply">ReMoin</string>
 
     <string name="ok">OK</string>
-    <string name="ga_category_account">Account</string>
-    <string name="ga_action_register">Register</string>
-    <string name="ga_action_sign_in">SignIn</string>
-    <string name="ga_category_social">Social</string>
-    <string name="ga_action_send_moin">SendMoin</string>
+    <string name="ga_category_account" translatable="false">Account</string>
+    <string name="ga_action_register" translatable="false">Register</string>
+    <string name="ga_action_sign_in" translatable="false">SignIn</string>
+    <string name="ga_category_social" translatable="false">Social</string>
+    <string name="ga_action_send_moin" translatable="false">SendMoin</string>
 
 </resources>
