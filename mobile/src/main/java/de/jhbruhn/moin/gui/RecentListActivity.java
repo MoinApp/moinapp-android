@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.ViewFlipper;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.melnykov.fab.FloatingActionButton;
 import com.squareup.picasso.Picasso;
@@ -39,6 +40,7 @@ import javax.inject.Named;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.jhbruhn.moin.MoinApplication;
 import de.jhbruhn.moin.R;
 import de.jhbruhn.moin.data.GCMToken;
 import de.jhbruhn.moin.data.Moin;
@@ -314,6 +316,14 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
 
     private void sendMoin(User receiver, Callback<Moin> cb) {
         mMoinService.sendMoin(new Moin(receiver.username), mAuthToken, cb);
+
+        MoinApplication.get(this).getTracker()
+                .send(new HitBuilders.EventBuilder()
+                                .setCategory(getString(R.string.ga_category_social))
+                                .setAction(getString(R.string.ga_action_send_moin))
+                                .setLabel("to " + receiver.username)
+                                .build()
+                );
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.dd.processbutton.FlatButton;
 import com.dd.processbutton.ProcessButton;
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.google.android.gms.analytics.HitBuilders;
 
 import javax.inject.Inject;
 
@@ -128,6 +129,13 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 mRegisterButton.setProgress(100);
 
                 finishLogin(username, accountType, session.token, password);
+
+                MoinApplication.get(SignInActivity.this).getTracker()
+                        .send(new HitBuilders.EventBuilder()
+                                        .setCategory(getString(R.string.ga_category_account))
+                                        .setAction(getString(R.string.ga_action_register))
+                                        .build()
+                        );
             }
 
             @Override
@@ -174,6 +182,13 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             public void success(Session session, Response response) {
                 mSignInButton.setProgress(100);
                 finishLogin(username, accountType, session.token, password);
+
+                MoinApplication.get(SignInActivity.this).getTracker()
+                        .send(new HitBuilders.EventBuilder()
+                            .setCategory(getString(R.string.ga_category_account))
+                            .setAction(getString(R.string.ga_action_sign_in))
+                            .build()
+                        );
             }
 
             @Override
