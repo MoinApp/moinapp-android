@@ -57,7 +57,10 @@
             android:text="@string/activity_sign_in_action_sign_in"
             android:id="@+id/sign_in_action_sign_in"
             android:layout_below="@+id/sign_in_password"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            custom:pb_colorNormal="#ddd"
+            custom:pb_colorPressed="#aaa" />
 
         <EditText
             android:layout_width="match_parent"
@@ -97,6 +100,10 @@
             android:text="@string/activity_sign_in_action_register"
             android:id="@+id/sign_in_action_register"
             android:layout_below="@+id/register_email"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="5dp"
+            custom:pb_colorNormal="#ddd"
+            custom:pb_colorPressed="#aaa" />
     </RelativeLayout>
 </ScrollView>

@@ -136,8 +136,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 mRegisterButton.setEnabled(true);
 
                 MoinError e = (MoinError) error.getBodyAs(MoinError.class);
-                showAlertDialog("Error!", e.message);
 
+                mRegisterButton.setErrorText(e.message);
                 mRegisterButton.setProgress(-1);
 
                 error.printStackTrace();
@@ -183,7 +183,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 mRegisterButton.setEnabled(true);
 
                 MoinError e = (MoinError) error.getBodyAs(MoinError.class);
-                showAlertDialog("Error!", e.message);
+
+                mSignInButton.setErrorText(e.message);
                 mSignInButton.setProgress(-1);
                 error.printStackTrace();
             }
