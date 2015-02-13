@@ -18,7 +18,7 @@
     <string name="activity_sign_in_title">Einloggen</string>
     <string name="activity_sign_in_username">Nutzername</string>
 
-    <string name="notification_action_reply">Antmoinen</string>
+    <string name="notification_action_reply">ReMoin</string>
     <string name="notification_main_action_name">Moin</string>
     <string name="notification_main_action_name_multiple">Moin (%d)</string>
     <string name="notification_sent_by">von %s</string>
