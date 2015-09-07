@@ -16,9 +16,17 @@
 #   public *;
 #}
 #butterknife
+-keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
--keep class **$$ViewInjector { *; }
--keepnames class * { @butterknife.InjectView *;}
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
 
 # Dagger
 -dontwarn dagger.internal.codegen.**
@@ -38,9 +46,30 @@
 -dontwarn okio.**
 
 #retrofit
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
 -dontwarn com.squareup.okhttp.**
+
 -dontwarn rx.**
--dontwarn retrofit.appengine.**
+-dontwarn retrofit.**
+-dontwarn okio.**
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+
+-dontwarn com.facebook.stetho.**
+-dontwarn com.facebook.stetho.dumpapp.**
+-dontwarn com.facebook.stetho.server.**
+-dontwarn com.facebook.stetho.inspector.**
+
+-dontwarn com.google.android.gms.analytics.internal.**
+-dontwarn com.google.android.gms.internal.**
+-dontwarn com.google.android.gms.tagmanager.**
+
+
+#stetho
+-keep class com.facebook.stetho.**{ *; }
 
 -keep class com.google.gson.** { *; }
 -keep class com.google.inject.** { *; }
