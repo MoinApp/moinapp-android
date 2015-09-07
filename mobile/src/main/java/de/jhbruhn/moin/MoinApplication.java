@@ -2,7 +2,9 @@ package de.jhbruhn.moin;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.v4.BuildConfig;
 
+import com.facebook.stetho.Stetho;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -24,11 +26,24 @@ public class MoinApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        if(BuildConfig.DEBUG)
+            initStetho();
+
         mTracker = GoogleAnalytics.getInstance(this).newTracker(R.xml.tracker);
         mTracker.enableAdvertisingIdCollection(true);
 
         graph = ObjectGraph.create(getModules().toArray());
         inject(this);
+    }
+
+    private void initStetho() {
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(
+                                Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(
+                                Stetho.defaultInspectorModulesProvider(this))
+                        .build());
     }
 
     public Tracker getTracker() {

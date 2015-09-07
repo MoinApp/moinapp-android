@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -113,7 +115,7 @@ public class ApiModule {
 
     static OkHttpClient createOkHttpClient(Application app) {
         OkHttpClient client = new OkHttpClient();
-
+        client.networkInterceptors().add(new StethoInterceptor());
         try {
             File cacheDir = new File(app.getCacheDir(), "http");
             Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
