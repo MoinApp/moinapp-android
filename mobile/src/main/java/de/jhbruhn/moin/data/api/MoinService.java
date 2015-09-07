@@ -45,4 +45,7 @@ public interface MoinService {
 
     @POST("/user/addgcm")
     GCMToken addGCMID(@Header("Authorization") String session, @Body GCMToken gcmToken);
+
+    @POST("/user/addgcm")
+    void addGCMID(@Header("Authorization") String session, @Body GCMToken gcmToken, Callback<GCMToken> callback);
 }

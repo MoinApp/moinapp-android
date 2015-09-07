@@ -26,6 +26,7 @@ import de.jhbruhn.moin.data.api.MoinService;
 import de.jhbruhn.moin.data.auth.MoinAccountAuthenticator;
 import de.jhbruhn.moin.data.auth.MoinAccountAuthenticatorService;
 import de.jhbruhn.moin.gcm.GcmIntentService;
+import de.jhbruhn.moin.gcm.GcmRegistrationService;
 import de.jhbruhn.moin.gcm.ReMoinReceiver;
 import de.jhbruhn.moin.gui.RecentListActivity;
 import de.jhbruhn.moin.gui.SignInActivity;
@@ -51,7 +52,8 @@ import retrofit.converter.GsonConverter;
                 MoinAccountAuthenticatorService.class,
                 GcmIntentService.class,
                 ReMoinReceiver.class,
-                RecentListFetchingService.class
+                RecentListFetchingService.class,
+                GcmRegistrationService.class
         }
 )
 public class ApiModule {
@@ -65,7 +67,7 @@ public class ApiModule {
     @Provides
     @Singleton
     Picasso providePicasso(Application app, OkHttpClient client) {
-        return new Picasso.Builder(app).loggingEnabled(BuildConfig.DEBUG).downloader(new OkHttpDownloader(client)).build();
+        return new Picasso.Builder(app).downloader(new OkHttpDownloader(client)).build();
     }
 
     @Provides
@@ -105,7 +107,7 @@ public class ApiModule {
     MoinService provideMoinService(Converter responseConverter, Client client) {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setClient(client)
-                .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
+                .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.BASIC : RestAdapter.LogLevel.NONE)
                 .setConverter(responseConverter)
                 .setEndpoint("https://moinapp.herokuapp.com/api/")
                 .build();

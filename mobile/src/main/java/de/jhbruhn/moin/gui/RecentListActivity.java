@@ -47,6 +47,7 @@ import de.jhbruhn.moin.data.Moin;
 import de.jhbruhn.moin.data.User;
 import de.jhbruhn.moin.data.api.MoinService;
 import de.jhbruhn.moin.data.auth.AccountGeneral;
+import de.jhbruhn.moin.gcm.GcmRegistrationService;
 import de.jhbruhn.moin.gui.data.UserRecyclerViewAdapter;
 import de.jhbruhn.moin.wear.RecentListFetchingService;
 import hugo.weaving.DebugLog;
@@ -56,7 +57,7 @@ import retrofit.client.Response;
 
 public class RecentListActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, UserRecyclerViewAdapter.UserRecyclerViewClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
     public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "appVersion";
+    public static final String PROPERTY_APP_VERSION = "appVersion";
 
     private static final int VIEW_FLIPPER_ITEM_LIST = 0;
     private static final int VIEW_FLIPPER_ITEM_LOADING = 1;
@@ -222,34 +223,7 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     }
 
     private void registerInBackground() {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(RecentListActivity.this);
-                    String regid = gcm.register(getString(R.string.google_cloud_id));
-
-                    mMoinService.addGCMID(mAuthToken, new GCMToken(regid));
-
-                    storeRegistrationId(regid);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-
-                return null;
-            }
-
-        }.execute(null, null, null);
-    }
-
-    @DebugLog
-    private void storeRegistrationId(String regid) {
-        int appVersion = getAppVersion(this);
-        Log.i("GCM", "Saving regId on app version " + appVersion);
-        SharedPreferences.Editor editor = mPreferencesGcm.edit();
-        editor.putString(PROPERTY_REG_ID, regid);
-        editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
+        startService(new Intent(this, GcmRegistrationService.class));
     }
 
     @DebugLog

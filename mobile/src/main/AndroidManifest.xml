@@ -43,6 +43,8 @@
             android:label="@string/activity_sign_in_title" >
         </activity>
 
+
+
         <service
             android:name=".data.auth.MoinAccountAuthenticatorService"
             android:exported="false" >
@@ -56,16 +58,36 @@
         </service>
 
         <receiver
-            android:name=".gcm.GcmBroadcastReceiver"
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.example.gcm" />
+                <category android:name="de.jhbruhn.moin" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
             </intent-filter>
         </receiver>
 
+        <service
+            android:name=".gcm.GcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".gcm.InstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+
         <service android:name=".gcm.GcmIntentService" >
+        </service>
+
+        <service android:name=".gcm.GcmRegistrationService" >
         </service>
 
         <service android:name=".wear.RecentListFetchingService" >
