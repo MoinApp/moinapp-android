@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import de.jhbruhn.moin.R;
 import de.jhbruhn.moin.api.GravatarApi;
 import de.jhbruhn.moin.data.User;
@@ -82,14 +82,14 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @InjectView(R.id.item_user_avatar_image)
+        @Bind(R.id.item_user_avatar_image)
         public ImageView mAvatarImageView;
-        @InjectView(R.id.item_user_username_text)
+        @Bind(R.id.item_user_username_text)
         public TextView mUsernameTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
         }
 
     }

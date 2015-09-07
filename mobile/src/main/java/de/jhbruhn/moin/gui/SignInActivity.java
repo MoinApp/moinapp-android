@@ -17,7 +17,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import de.jhbruhn.moin.MoinApplication;
 import de.jhbruhn.moin.R;
@@ -44,20 +44,20 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     MoinService mMoinService;
 
 
-    @InjectView(R.id.sign_in_username)
+    @Bind(R.id.sign_in_username)
     EditText mUsername;
-    @InjectView(R.id.sign_in_password)
+    @Bind(R.id.sign_in_password)
     EditText mPassword;
-    @InjectView(R.id.sign_in_action_sign_in)
+    @Bind(R.id.sign_in_action_sign_in)
     ActionProcessButton mSignInButton;
 
-    @InjectView(R.id.register_username)
+    @Bind(R.id.register_username)
     EditText mRegisterUsername;
-    @InjectView(R.id.register_password)
+    @Bind(R.id.register_password)
     EditText mRegisterPassword;
-    @InjectView(R.id.register_email)
+    @Bind(R.id.register_email)
     EditText mRegisterEmail;
-    @InjectView(R.id.sign_in_action_register)
+    @Bind(R.id.sign_in_action_register)
     ActionProcessButton mRegisterButton;
 
     private String mAuthTokenType;
@@ -68,7 +68,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         super.onCreate(savedInstanceState);
         MoinApplication.get(this).inject(this);
         setContentView(R.layout.activity_sign_in);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         mAuthTokenType = getIntent().getStringExtra(ARG_AUTH_TYPE);
 

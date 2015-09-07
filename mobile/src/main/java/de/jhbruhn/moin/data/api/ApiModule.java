@@ -116,13 +116,9 @@ public class ApiModule {
     static OkHttpClient createOkHttpClient(Application app) {
         OkHttpClient client = new OkHttpClient();
         client.networkInterceptors().add(new StethoInterceptor());
-        try {
-            File cacheDir = new File(app.getCacheDir(), "http");
-            Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
-            client.setCache(cache);
-        } catch (IOException e) {
-            Log.e("ERROR", "Unable to install disk cache.");
-        }
+        File cacheDir = new File(app.getCacheDir(), "http");
+        Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
+        client.setCache(cache);
 
         return client;
     }

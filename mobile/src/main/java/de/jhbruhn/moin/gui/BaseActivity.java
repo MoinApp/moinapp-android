@@ -18,7 +18,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
         setContentView(getLayoutId());
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
     }
 
     protected abstract int getLayoutId();

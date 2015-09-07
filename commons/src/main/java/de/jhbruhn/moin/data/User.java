@@ -31,9 +31,10 @@ public class User implements Parcelable {
 
     public int getCrazyId() {
         int sum = 0;
-        for(Character c : id.toCharArray())
-            if(Character.isDigit(c))
-                sum += Integer.valueOf(c + "");
+        if(id != null)
+            for(Character c : id.toCharArray())
+                if(Character.isDigit(c))
+                    sum += Integer.valueOf(c + "");
         return sum;
     }
 

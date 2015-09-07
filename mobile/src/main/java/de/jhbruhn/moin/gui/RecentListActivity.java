@@ -38,7 +38,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import de.jhbruhn.moin.MoinApplication;
 import de.jhbruhn.moin.R;
@@ -80,13 +80,13 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
 
     AccountManager mAccountManager;
 
-    @InjectView(R.id.recent_list_recycler_view)
+    @Bind(R.id.recent_list_recycler_view)
     RecyclerView mRecentListRecyclerView;
-    @InjectView(R.id.recent_list_add_friend_button)
+    @Bind(R.id.recent_list_add_friend_button)
     FloatingActionButton mAddFriendButton;
-    @InjectView(R.id.recent_list_swipe_refresh_layout)
+    @Bind(R.id.recent_list_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.recent_list_view_flipper)
+    @Bind(R.id.recent_list_view_flipper)
     ViewFlipper mViewFlipper;
 
     private String mAuthToken;
