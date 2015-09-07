@@ -5,3 +5,7 @@
 .DS_Store
 /build
 *.jks
+/captures
+*.iml
+.idea/
+app/build/
