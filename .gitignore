@@ -9,3 +9,5 @@
 *.iml
 .idea/
 app/build/
+*.iml
+.idea/.name
