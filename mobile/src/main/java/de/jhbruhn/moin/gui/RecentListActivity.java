@@ -339,7 +339,6 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     }
 
     @Override
-    @DebugLog
     public boolean onQueryTextChange(String s) {
         if(s.isEmpty()) return true;
         mSwipeRefreshLayout.setEnabled(false);
