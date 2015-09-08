@@ -145,10 +145,12 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
                 MoinError e = (MoinError) error.getBodyAs(MoinError.class);
 
-                mRegisterButton.setErrorText(e.message);
-                mRegisterButton.setProgress(-1);
+                if (e != null) {
+                    mRegisterButton.setErrorText(e.message);
+                }
 
                 error.printStackTrace();
+                mRegisterButton.setProgress(-1);
             }
         });
     }
@@ -199,7 +201,9 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
                 MoinError e = (MoinError) error.getBodyAs(MoinError.class);
 
-                mSignInButton.setErrorText(e.message);
+                if(e != null)
+                    mSignInButton.setErrorText(e.message);
+
                 mSignInButton.setProgress(-1);
                 error.printStackTrace();
             }
