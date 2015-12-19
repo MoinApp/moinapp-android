@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -118,6 +119,8 @@ public class ApiModule {
     static OkHttpClient createOkHttpClient(Application app) {
         OkHttpClient client = new OkHttpClient();
         client.networkInterceptors().add(new StethoInterceptor());
+        client.setReadTimeout(60, TimeUnit.SECONDS);
+        client.setConnectTimeout(60, TimeUnit.SECONDS);
         File cacheDir = new File(app.getCacheDir(), "http");
         Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
         client.setCache(cache);
