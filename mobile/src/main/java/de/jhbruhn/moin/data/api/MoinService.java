@@ -20,32 +20,32 @@ import retrofit.http.Query;
  */
 public interface MoinService {
     @POST("/moin")
-    void sendMoin(@Body Moin moin, @Header("Authorization") String session, Callback<Moin> callback);
+    void sendMoin(@Body Moin moin, @Header("Session") String session, Callback<Moin> callback);
 
-    @POST("/auth")
+    @POST("/users/auth")
     void authenticate(@Body User user, Callback<Session> callback);
 
-    @POST("/auth")
+    @POST("/users/auth")
     Session authenticate(@Body User user);
 
-    @POST("/signup")
+    @POST("/users/signup")
     void register(@Body User user, Callback<Session> callback);
 
     @GET("/user/:username")
     User getUser(@Path("username") String username);
 
-    @GET("/user")
-    void findUser(@Header("Authorization") String session, @Query("username") String username, Callback<List<User>> callback);
+    @GET("/users")
+    void findUser(@Header("Session") String session, @Query("username") String username, Callback<List<User>> callback);
+
+    @GET("/users/recents")
+    void getRecents(@Header("Session") String session, Callback<List<User>> callback);
 
     @GET("/user/recents")
-    void getRecents(@Header("Authorization") String session, Callback<List<User>> callback);
+    List<User> getRecents(@Header("Session") String session);
 
-    @GET("/user/recents")
-    List<User> getRecents(@Header("Authorization") String session);
+    @POST("/users/addPush")
+    GCMToken addGCMID(@Header("Session") String session, @Body GCMToken gcmToken);
 
-    @POST("/user/addgcm")
-    GCMToken addGCMID(@Header("Authorization") String session, @Body GCMToken gcmToken);
-
-    @POST("/user/addgcm")
-    void addGCMID(@Header("Authorization") String session, @Body GCMToken gcmToken, Callback<GCMToken> callback);
+    @POST("/users/addPush")
+    void addGCMID(@Header("Session") String session, @Body GCMToken gcmToken, Callback<GCMToken> callback);
 }

@@ -181,7 +181,7 @@ public class RecentListActivity extends Activity implements WearableListView.Cli
         mClicked = true;
         for(String n : getNodes()) {
 
-            Wearable.MessageApi.sendMessage(mGoogleApiClient, n, Constants.MESSAGE_PATH_MOIN, u.username.getBytes()).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
+            Wearable.MessageApi.sendMessage(mGoogleApiClient, n, Constants.MESSAGE_PATH_MOIN, u.name.getBytes()).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
                 @Override
                 public void onResult(MessageApi.SendMessageResult sendMessageResult) {
                     Intent intent = new Intent(RecentListActivity.this, ConfirmationActivity.class);

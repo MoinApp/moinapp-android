@@ -49,7 +49,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     public void onBindViewHolder(UserRecyclerViewAdapter.ViewHolder holder, final int i) {
         final User user = mUsers.get(i);
 
-        holder.mUsernameTextView.setText(user.username);
+        holder.mUsernameTextView.setText(user.name);
 
         mPicasso.cancelRequest(holder.mAvatarImageView);
         if(user.email_hash != null && !user.email_hash.isEmpty()) {

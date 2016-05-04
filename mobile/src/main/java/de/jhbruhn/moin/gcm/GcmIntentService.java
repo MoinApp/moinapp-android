@@ -72,17 +72,17 @@ public class GcmIntentService extends IntentService {
             sender.id = extras.getString("id");
 
             String moinId = extras.getString("moin-uuid");
-            Set<String> receivedMoins = mReceivedMoins.getStringSet(sender.username, new HashSet<String>());
+            Set<String> receivedMoins = mReceivedMoins.getStringSet(sender.name, new HashSet<String>());
 
             if (receivedMoins.contains(moinId)) return;
 
             receivedMoins.add(moinId);
 
-            mReceivedMoins.edit().putStringSet(sender.username, receivedMoins).commit();
+            mReceivedMoins.edit().putStringSet(sender.name, receivedMoins).commit();
 
 
-            int unreadMoins = mPreferencesUnreadMoins.getInt(sender.username, 0);
-            mPreferencesUnreadMoins.edit().putInt(sender.username, ++unreadMoins).apply();
+            int unreadMoins = mPreferencesUnreadMoins.getInt(sender.name, 0);
+            mPreferencesUnreadMoins.edit().putInt(sender.name, ++unreadMoins).apply();
 
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
@@ -91,7 +91,7 @@ public class GcmIntentService extends IntentService {
                     .setContentTitle(getString(R.string.notification_main_action_name))
                     .setSmallIcon(R.drawable.ic_launcher)
                     .setSound(Uri.parse("android.resource://" + getPackageName() + "/" + MOIN_SOUNDS[((int) Math.floor(Math.random() * MOIN_SOUNDS.length))]))
-                    .setContentText(getString(R.string.notification_sent_by, sender.username));
+                    .setContentText(getString(R.string.notification_sent_by, sender.name));
 
             Intent resultIntent = new Intent(this, RecentListActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -105,7 +105,7 @@ public class GcmIntentService extends IntentService {
             builder.setContentIntent(resultPendingIntent).setAutoCancel(true);
 
             Intent remoinIntent = new Intent(this, ReMoinReceiver.class);
-            remoinIntent.putExtra(ReMoinReceiver.KEY_USERNAME, sender.username);
+            remoinIntent.putExtra(ReMoinReceiver.KEY_USERNAME, sender.name);
             remoinIntent.putExtra(ReMoinReceiver.KEY_NOTIFICATION_ID, sender.getCrazyId());
             builder.addAction(R.drawable.ic_reply, getString(R.string.notification_action_reply), PendingIntent.getBroadcast(this, sender.getCrazyId(), remoinIntent, Intent.FILL_IN_DATA));
 

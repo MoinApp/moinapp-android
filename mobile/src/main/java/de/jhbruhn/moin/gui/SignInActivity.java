@@ -128,7 +128,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             public void success(Session session, Response response) {
                 mRegisterButton.setProgress(100);
 
-                finishLogin(username, accountType, session.token, password);
+                finishLogin(username, accountType, session.session_token, password);
 
                 MoinApplication.get(SignInActivity.this).getTracker()
                         .send(new HitBuilders.EventBuilder()
@@ -183,7 +183,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             @Override
             public void success(Session session, Response response) {
                 mSignInButton.setProgress(100);
-                finishLogin(username, accountType, session.token, password);
+                finishLogin(username, accountType, session.session_token, password);
 
                 MoinApplication.get(SignInActivity.this).getTracker()
                         .send(new HitBuilders.EventBuilder()

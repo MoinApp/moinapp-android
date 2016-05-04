@@ -9,7 +9,7 @@ import android.os.Parcelable;
  * Created by Jan-Henrik on 19.12.2014.
  */
 public class User implements Parcelable {
-    public String username;
+    public String name;
     public String password;
     public String email_hash;
     public String id;
@@ -17,12 +17,12 @@ public class User implements Parcelable {
     public Bitmap avatar;
 
     public User(String username, String password) {
-        this.username = username;
+        this.name = username;
         this.password = password;
     }
 
     public User(Parcel in) {
-        this.username = in.readString();
+        this.name = in.readString();
         this.password = in.readString();
         this.email_hash = in.readString();
         this.id = in.readString();
@@ -46,7 +46,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(username);
+        parcel.writeString(name);
         parcel.writeString(password);
         parcel.writeString(email_hash);
         parcel.writeString(id);

@@ -155,7 +155,7 @@ public class RecentListFetchingService extends IntentService implements GoogleAp
     public DataMap userToDataMap(User user) {
         DataMap map = new DataMap();
 
-        map.putString("username", user.username);
+        map.putString("username", user.name);
         map.putString("email_hash", user.email_hash);
         map.putString("id", user.id);
 

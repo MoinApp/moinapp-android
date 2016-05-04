@@ -106,11 +106,12 @@ public class ApiModule {
     @Provides
     @Singleton
     MoinService provideMoinService(Converter responseConverter, Client client) {
+
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setClient(client)
-                .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.BASIC : RestAdapter.LogLevel.NONE)
+                .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
                 .setConverter(responseConverter)
-                .setEndpoint("https://moinapp.herokuapp.com/api/")
+                .setEndpoint("https://moinapp-staging.herokuapp.com/api/v4")
                 .build();
 
         return restAdapter.create(MoinService.class);

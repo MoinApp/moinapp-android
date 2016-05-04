@@ -289,13 +289,13 @@ public class RecentListActivity extends BaseActivity implements SwipeRefreshLayo
     }
 
     private void sendMoin(User receiver, Callback<Moin> cb) {
-        mMoinService.sendMoin(new Moin(receiver.username), mAuthToken, cb);
+        mMoinService.sendMoin(new Moin(receiver.name), mAuthToken, cb);
 
         MoinApplication.get(this).getTracker()
                 .send(new HitBuilders.EventBuilder()
                                 .setCategory(getString(R.string.ga_category_social))
                                 .setAction(getString(R.string.ga_action_send_moin))
-                                .setLabel("to " + receiver.username)
+                                .setLabel("to " + receiver.name)
                                 .build()
                 );
     }

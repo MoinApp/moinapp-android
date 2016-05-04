@@ -76,7 +76,7 @@ public class MoinAccountAuthenticator extends AbstractAccountAuthenticator {
             final String password = am.getPassword(account);
             if (password != null) {
                 try {
-                    authToken = mMoinService.authenticate(new User(account.name, password)).token;
+                    authToken = mMoinService.authenticate(new User(account.name, password)).session_token;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

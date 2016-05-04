@@ -54,7 +54,7 @@ public class RecentUsersAdapter extends WearableListView.Adapter {
 
         ItemViewHolder itemHolder = (ItemViewHolder) holder;
 
-        itemHolder.textView.setText(user.username);
+        itemHolder.textView.setText(user.name);
 
         if(user.avatar != null) {
             itemHolder.imageView.setImageBitmap(user.avatar);
